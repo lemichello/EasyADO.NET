@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Data.Common;
+using System.Text.RegularExpressions;
 
 namespace EasyADO.NET
 {
-    public class EasyAdoNet
+    public partial class EasyAdoNet
     {
         /// <param name="connectionString">Connection string to the Microsoft SQL Server database.</param>
         /// <exception cref="ArgumentException">Throws, when given connection string is empty or incorrect.</exception>
@@ -12,31 +14,19 @@ namespace EasyADO.NET
         public EasyAdoNet(string connectionString)
         {
             _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
+            _tableNames       = new List<string>();
 
             if (string.IsNullOrWhiteSpace(_connectionString))
                 throw new ArgumentException("Given empty connection string", nameof(connectionString));
 
             if (!CheckConnectionString())
                 throw new ArgumentException("Given incorrect connection string");
+
+            InitializeDbTablesNames();
         }
 
-        /// <summary>
-        /// Retrieves all the data from a given table name.
-        /// </summary>
-        /// <returns>A SqlDataReader.</returns>
-        public SqlDataReader Find(string tableName)
-        {
-            var connection = new SqlConnection(_connectionString);
-
-            connection.Open();
-
-            using (var command = new SqlCommand($"SELECT * FROM {tableName}", connection))
-            {
-                command.Parameters.AddWithValue("@tableName", tableName);
-
-                return command.ExecuteReader();
-            }
-        }
+        private readonly string       _connectionString;
+        private readonly List<string> _tableNames;
 
         private bool CheckConnectionString()
         {
@@ -55,6 +45,38 @@ namespace EasyADO.NET
             return true;
         }
 
-        private readonly string _connectionString;
+        private void InitializeDbTablesNames()
+        {
+            var dbName = Regex.Match(_connectionString, "^.*;Initial Catalog=(.+);.*$").Groups[1].Value;
+            var reader = GetTableNamesReader(dbName); 
+
+            while (reader.Read())
+            {
+                _tableNames.Add(reader[0].ToString());
+            }
+        }
+
+        private SqlConnection GetAndOpenConnection()
+        {
+            var connection = new SqlConnection(_connectionString);
+
+            connection.Open();
+
+            return connection;
+        }
+
+        private SqlDataReader GetTableNamesReader(string dbName)
+        {
+            var connection = GetAndOpenConnection();
+
+            using (var command = new SqlCommand(@"SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES
+                                                          WHERE TABLE_TYPE = 'BASE TABLE' AND 
+                                                                TABLE_CATALOG = @dbName", connection))
+            {
+                command.Parameters.AddWithValue("@dbName", dbName);
+
+                return command.ExecuteReader();
+            }
+        }
     }
 }
