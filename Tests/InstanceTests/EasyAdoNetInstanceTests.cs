@@ -1,9 +1,8 @@
 using System;
-using System.Collections.Generic;
 using EasyADO.NET;
 using NUnit.Framework;
 
-namespace Tests
+namespace Tests.InstanceTests
 {
     [TestFixture]
     public class EasyAdoNetInstanceTests
@@ -19,18 +18,18 @@ namespace Tests
 
         [TestCase(@"Data Source=MAKSS\SQLEXPRESS;Initial Catalog=Tesst;Integrated Security=True")]
         [TestCase("")]
-        public void When_EasyAdoNet_Expect_ThrowsArgumentException(string connectionString)
+        public void When_EasyAdoNet_Throws_ArgumentException(string connectionString)
         {
-            Assert.Throws<ArgumentException>(() =>
+            Assert.Throws<ArgumentException>(code: delegate
             {
                 var _ = new EasyAdoNet(connectionString);
             });
         }
 
         [TestCase(null)]
-        public void When_EasyAdoNet_Expect_ThrowsArgumentNullException(string connectionString)
+        public void When_EasyAdoNet_Throws_ArgumentNullException(string connectionString)
         {
-            Assert.Throws<ArgumentNullException>(() =>
+            Assert.Throws<ArgumentNullException>(delegate
             {
                 var _ = new EasyAdoNet(connectionString);
             });

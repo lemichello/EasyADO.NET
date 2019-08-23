@@ -2,43 +2,19 @@ using System;
 using EasyADO.NET;
 using NUnit.Framework;
 
-namespace Tests
+namespace Tests.FindTests
 {
     [TestFixture]
-    public class EasyAdoNetFindTests
+    public class FindAllByConditionsTests
     {
         [SetUp]
         public void Init()
         {
             _easyAdoNet = new EasyAdoNet(ConnectionString);
         }
-
-        [TestCase("Person")]
-        [TestCase("Role")]
-        public void When_FindAll_Expect_HasRows(string tableName)
-        {
-            var result = _easyAdoNet.Find(tableName);
-
-            Assert.IsTrue(result.HasRows, "Expected and result readers must have the same rows count");
-        }
-
-        [TestCase("EmptyTable")]
-        public void When_FindAll_ExpectNot_HasRows(string tableName)
-        {
-            var result = _easyAdoNet.Find(tableName);
-
-            Assert.IsFalse(result.HasRows);
-        }
-
-        [TestCase("NotExisting")]
-        [TestCase("Another")]
-        public void When_FindAll_Expect_ThrowArgumentException(string tableName)
-        {
-            Assert.Throws<ArgumentException>(() => { _easyAdoNet.Find(tableName); });
-        }
-
+        
         [Test, TestCaseSource(nameof(CorrectParameters))]
-        public void When_FindByConditions_Expect_HasRows(string tableName,
+        public void When_Find_Has_Rows(string tableName,
             params Tuple<string, object>[] conditions)
         {
             var result = _easyAdoNet.Find(tableName, conditions);
@@ -47,7 +23,7 @@ namespace Tests
         }
 
         [Test, TestCaseSource(nameof(EmptyTableParameters))]
-        public void When_FindByConditions_ExpectNot_HasRows(string tableName,
+        public void When_Find_HasNot_Rows(string tableName,
             params Tuple<string, object>[] conditions)
         {
             var result = _easyAdoNet.Find(tableName, conditions);
@@ -56,14 +32,14 @@ namespace Tests
         }
 
         [Test, TestCaseSource(nameof(IncorrectParameters))]
-        public void When_FindByConditions_Expect_ThrowArgumentException(string tableName,
+        public void When_Find_Throws_ArgumentException(string tableName,
             params Tuple<string, object>[] conditions)
         {
             Assert.Throws<ArgumentException>(() => { _easyAdoNet.Find(tableName, conditions); });
         }
 
         [Test, TestCaseSource(nameof(NullParameters))]
-        public void When_FindByCondition_Expect_ThrowArgumentNullException(string tableName,
+        public void When_Find_Throws_ArgumentNullException(string tableName,
             params Tuple<string, object>[] conditions)
         {
             Assert.Throws<ArgumentNullException>(() => { _easyAdoNet.Find(tableName, conditions); });
@@ -80,7 +56,7 @@ namespace Tests
         {
             new object[]
             {
-                "Person",
+                "Persons",
                 new[]
                 {
                     new Tuple<string, object>("Name", "Maksym"),
@@ -89,7 +65,7 @@ namespace Tests
             },
             new object[]
             {
-                "Role",
+                "Roles",
                 new[]
                 {
                     new Tuple<string, object>("Name", "Admin"),
@@ -146,7 +122,7 @@ namespace Tests
                 null
             }
         };
-        
+
         #endregion
     }
 }

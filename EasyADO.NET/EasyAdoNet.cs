@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Data.Common;
 using System.Text.RegularExpressions;
 
 namespace EasyADO.NET
@@ -54,6 +53,15 @@ namespace EasyADO.NET
             {
                 _tableNames.Add(reader[0].ToString());
             }
+        }
+
+        private void CheckForTableExistent(string tableName)
+        {
+            if (tableName == null)
+                throw new ArgumentNullException(nameof(tableName));
+            
+            if (!_tableNames.Contains(tableName))
+                throw new ArgumentException("Passed nonexistent name of the table", nameof(tableName));
         }
 
         private SqlConnection GetAndOpenConnection()
