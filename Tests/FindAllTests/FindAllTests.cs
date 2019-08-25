@@ -2,7 +2,7 @@ using System;
 using EasyADO.NET;
 using NUnit.Framework;
 
-namespace Tests.FindTests
+namespace Tests.FindAllTests
 {
     [TestFixture]
     public class FindAllTests
@@ -15,28 +15,28 @@ namespace Tests.FindTests
 
         [TestCase("Persons")]
         [TestCase("Roles")]
-        public void When_Find_Has_Rows(string tableName)
+        public void When_FindAll_Has_Rows(string tableName)
         {
-            var result = _easyAdoNet.Find(tableName);
+            var result = _easyAdoNet.FindAll(tableName);
 
             Assert.IsTrue(result.HasRows, "Expected and result readers must have the same rows count");
         }
 
         [TestCase("EmptyTable")]
-        public void When_Find_HasNot_Rows(string tableName)
+        public void When_FindAll_HasNot_Rows(string tableName)
         {
-            var result = _easyAdoNet.Find(tableName);
+            var result = _easyAdoNet.FindAll(tableName);
 
             Assert.IsFalse(result.HasRows);
         }
 
         [TestCase("NotExisting")]
         [TestCase("Another")]
-        public void When_Find_Throws_ArgumentException(string tableName)
+        public void When_FindAll_Throws_ArgumentException(string tableName)
         {
-            Assert.Throws<ArgumentException>(() => { _easyAdoNet.Find(tableName); });
+            Assert.Throws<ArgumentException>(() => { _easyAdoNet.FindAll(tableName); });
         }
-        
+
         private EasyAdoNet _easyAdoNet;
 
         private const string ConnectionString = "Data Source=MAKS\\SQLEXPRESS;Initial Catalog=Test;" +

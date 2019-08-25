@@ -47,7 +47,7 @@ namespace EasyADO.NET
         private void InitializeDbTablesNames()
         {
             var dbName = Regex.Match(_connectionString, "^.*;Initial Catalog=(.+);.*$").Groups[1].Value;
-            var reader = GetTableNamesReader(dbName); 
+            var reader = GetTableNamesReader(dbName);
 
             while (reader.Read())
             {
@@ -59,7 +59,7 @@ namespace EasyADO.NET
         {
             if (tableName == null)
                 throw new ArgumentNullException(nameof(tableName));
-            
+
             if (!_tableNames.Contains(tableName))
                 throw new ArgumentException("Passed nonexistent name of the table", nameof(tableName));
         }

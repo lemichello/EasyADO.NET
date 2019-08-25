@@ -2,7 +2,7 @@ using System;
 using EasyADO.NET;
 using NUnit.Framework;
 
-namespace Tests.FindTests
+namespace Tests.FindAllTests
 {
     [TestFixture]
     public class FindAllByConditionsTests
@@ -12,37 +12,37 @@ namespace Tests.FindTests
         {
             _easyAdoNet = new EasyAdoNet(ConnectionString);
         }
-        
+
         [Test, TestCaseSource(nameof(CorrectParameters))]
-        public void When_Find_Has_Rows(string tableName,
+        public void When_FindAll_Has_Rows(string tableName,
             params Tuple<string, object>[] conditions)
         {
-            var result = _easyAdoNet.Find(tableName, conditions);
+            var result = _easyAdoNet.FindAll(tableName, conditions);
 
             Assert.IsTrue(result.HasRows);
         }
 
         [Test, TestCaseSource(nameof(EmptyTableParameters))]
-        public void When_Find_HasNot_Rows(string tableName,
+        public void When_FindAll_HasNot_Rows(string tableName,
             params Tuple<string, object>[] conditions)
         {
-            var result = _easyAdoNet.Find(tableName, conditions);
+            var result = _easyAdoNet.FindAll(tableName, conditions);
 
             Assert.IsFalse(result.HasRows);
         }
 
         [Test, TestCaseSource(nameof(IncorrectParameters))]
-        public void When_Find_Throws_ArgumentException(string tableName,
+        public void When_FindAll_Throws_ArgumentException(string tableName,
             params Tuple<string, object>[] conditions)
         {
-            Assert.Throws<ArgumentException>(() => { _easyAdoNet.Find(tableName, conditions); });
+            Assert.Throws<ArgumentException>(() => { _easyAdoNet.FindAll(tableName, conditions); });
         }
 
         [Test, TestCaseSource(nameof(NullParameters))]
-        public void When_Find_Throws_ArgumentNullException(string tableName,
+        public void When_FindAll_Throws_ArgumentNullException(string tableName,
             params Tuple<string, object>[] conditions)
         {
-            Assert.Throws<ArgumentNullException>(() => { _easyAdoNet.Find(tableName, conditions); });
+            Assert.Throws<ArgumentNullException>(() => { _easyAdoNet.FindAll(tableName, conditions); });
         }
 
         private EasyAdoNet _easyAdoNet;
