@@ -71,12 +71,7 @@ namespace EasyADO.NET
         public SqlDataReader FindAll(string tableName, string predicate)
         {
             CheckForTableExistent(tableName);
-
-            if (predicate != null && string.IsNullOrWhiteSpace(predicate))
-                throw new ArgumentException("Condition string can't be blank", nameof(predicate));
-
-            if (predicate == null)
-                throw new ArgumentNullException(nameof(predicate));
+            CheckPredicate(predicate);
 
             var connection = GetAndOpenConnection();
 
@@ -99,6 +94,15 @@ namespace EasyADO.NET
             var resultString = builder.ToString();
 
             return resultString.Remove(resultString.LastIndexOf("AND", StringComparison.Ordinal));
+        }
+
+        private static void CheckPredicate(string predicate)
+        {
+            if (predicate != null && string.IsNullOrWhiteSpace(predicate))
+                throw new ArgumentException("Condition string can't be blank", nameof(predicate));
+
+            if (predicate == null)
+                throw new ArgumentNullException(nameof(predicate));
         }
     }
 }
