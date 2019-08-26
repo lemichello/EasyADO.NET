@@ -63,7 +63,7 @@ namespace EasyADO.NET
         /// Retrieves all the data from a given table name by predicate.
         /// </summary>
         /// <param name="tableName">Name of the table, from which will be retrieving the data.</param>
-        /// <param name="predicate">Part of SQL query, which starts after 'WHERE' statement, e.g. 'ColumnName = Value AND AnotherColumnName = AnotherValue'.</param>
+        /// <param name="predicate">Part of SQL query, which starts with 'WHERE' statement, e.g. 'WHERE ColumnName = Value AND AnotherColumnName = AnotherValue'.</param>
         /// <returns>A <see cref="SqlDataReader"/>.</returns>
         /// <exception cref="ArgumentException">Throws, when <paramref name="tableName"/> doesn't exist in the database or <paramref name="predicate"/> is empty.</exception>
         /// <exception cref="ArgumentNullException">Throws, when <paramref name="tableName"/> or <paramref name="predicate"/> is null. </exception>
@@ -80,7 +80,7 @@ namespace EasyADO.NET
 
             var connection = GetAndOpenConnection();
 
-            using (var command = new SqlCommand($"SELECT * FROM {tableName} WHERE {predicate}",
+            using (var command = new SqlCommand($"SELECT * FROM {tableName} {predicate}",
                 connection))
             {
                 return command.ExecuteReader();
