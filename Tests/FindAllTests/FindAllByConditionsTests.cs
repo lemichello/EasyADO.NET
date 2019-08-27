@@ -47,10 +47,6 @@ namespace Tests.FindAllTests
 
         private EasyAdoNet _easyAdoNet;
 
-        private const string ConnectionString = "data source=(LocalDb)\\MSSQLLocalDB;" +
-                                                "initial catalog=EasyAdoNetTest;integrated security=True;" +
-                                                "MultipleActiveResultSets=True;App=EntityFramework";
-
         #region FindParameters
 
         private static readonly object[] CorrectParameters =
