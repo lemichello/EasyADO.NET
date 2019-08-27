@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace Tests.FindTests
 {
     [TestFixture]
-    public class FindColumnsByPredicateTests
+    public class FindColumnsByPredicateTests : BaseTestFixture
     {
         [SetUp]
         public void Init()
@@ -57,7 +57,8 @@ namespace Tests.FindTests
 
         private EasyAdoNet _easyAdoNet;
 
-        private const string ConnectionString = "Data Source=MAKS\\SQLEXPRESS;Initial Catalog=Test;" +
-                                                "Integrated Security=True";
+        private const string ConnectionString = "data source=(LocalDb)\\MSSQLLocalDB;" +
+                                                "initial catalog=EasyAdoNetTest;integrated security=True;" +
+                                                "MultipleActiveResultSets=True;App=EntityFramework";
     }
 }

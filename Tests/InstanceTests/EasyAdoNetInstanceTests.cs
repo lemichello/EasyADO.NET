@@ -5,9 +5,11 @@ using NUnit.Framework;
 namespace Tests.InstanceTests
 {
     [TestFixture]
-    public class EasyAdoNetInstanceTests
+    public class EasyAdoNetInstanceTests : BaseTestFixture
     {
-        [TestCase(@"Data Source=MAKS\SQLEXPRESS;Initial Catalog=Test;Integrated Security=True")]
+        [TestCase("data source=(LocalDb)\\MSSQLLocalDB;" +
+                  "initial catalog=EasyAdoNetTest;integrated security=True;" +
+                  "MultipleActiveResultSets=True;App=EntityFramework")]
         public void When_EasyAdoNet_Expect_Initializes(string connectionString)
         {
             Assert.DoesNotThrow(() =>
@@ -16,7 +18,9 @@ namespace Tests.InstanceTests
             });
         }
 
-        [TestCase(@"Data Source=MAKSS\SQLEXPRESS;Initial Catalog=Tesst;Integrated Security=True")]
+        [TestCase("data source=(LocalDb)\\MSSQLLocalDB;" +
+                  "initial catalog=NotExistsDb;integrated security=True;" +
+                  "MultipleActiveResultSets=True;App=EntityFramework")]
         [TestCase("")]
         public void When_EasyAdoNet_Throws_ArgumentException(string connectionString)
         {

@@ -46,7 +46,7 @@ namespace EasyADO.NET
 
         private void InitializeDbTablesNames()
         {
-            var dbName = Regex.Match(_connectionString, "^.*;Initial Catalog=(.+);.*$").Groups[1].Value;
+            var dbName = Regex.Match(_connectionString, @"^.*;[Ii]nitial [Cc]atalog=([\w\d]+);.*$").Groups[1].Value;
             var reader = GetTableNamesReader(dbName);
 
             while (reader.Read())
