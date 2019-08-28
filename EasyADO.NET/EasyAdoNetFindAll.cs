@@ -1,8 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
 
 namespace EasyADO.NET
 {
@@ -33,24 +30,23 @@ namespace EasyADO.NET
         /// Retrieves all the data from a given table name by conditions.
         /// </summary>
         /// <param name="tableName">Name of the table, from which will be retrieving the data.</param>
-        /// <param name="conditions">Conditions, by which will be searching. First component - name of the column,
+        /// <param name="equalityConditions">Conditions, by which will be searching. First component - name of the column,
         /// second element - value of the column.
         /// </param>
         /// <returns>A <see cref="SqlDataReader"/>.</returns>
         /// <exception cref="ArgumentException">Throws, when <paramref name="tableName"/> doesn't exist in the database.</exception>
-        /// <exception cref="ArgumentNullException">Throws, when <paramref name="tableName"/> or <paramref name="conditions"/> are null.</exception>
-        public SqlDataReader FindAll(string tableName, params Tuple<string, object>[] conditions)
+        /// <exception cref="ArgumentNullException">Throws, when <paramref name="tableName"/> or <paramref name="equalityConditions"/> are null.</exception>
+        public SqlDataReader FindAll(string tableName, params Tuple<string, object>[] equalityConditions)
         {
-            if (conditions.Any(i => i == null))
-                throw new ArgumentNullException(nameof(conditions));
-
+            CheckConditions(equalityConditions);
             CheckForTableExistent(tableName);
 
             var connection = GetAndOpenConnection();
 
-            using (var command = new SqlCommand(BuildCommandQuery(tableName, conditions), connection))
+            using (var command = new SqlCommand($"SELECT * FROM {tableName} WHERE {BuildConditionsQuery(equalityConditions)}", 
+                connection))
             {
-                foreach (var (column, value) in conditions)
+                foreach (var (column, value) in equalityConditions)
                 {
                     command.Parameters.AddWithValue($"@{column}", value);
                 }
@@ -80,20 +76,6 @@ namespace EasyADO.NET
             {
                 return command.ExecuteReader();
             }
-        }
-
-        private static string BuildCommandQuery(string tableName, IEnumerable<Tuple<string, object>> conditions)
-        {
-            var builder = new StringBuilder($"SELECT * FROM {tableName} WHERE ");
-
-            foreach (var (column, _) in conditions)
-            {
-                builder.Append($"{column} = @{column} AND ");
-            }
-
-            var resultString = builder.ToString();
-
-            return resultString.Remove(resultString.LastIndexOf("AND", StringComparison.Ordinal));
         }
 
         private static void CheckPredicate(string predicate)

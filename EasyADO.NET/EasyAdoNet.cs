@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace EasyADO.NET
@@ -85,6 +87,29 @@ namespace EasyADO.NET
 
                 return command.ExecuteReader();
             }
+        }
+        
+        private static string BuildConditionsQuery(IEnumerable<Tuple<string, object>> conditions)
+        {
+            var builder = new StringBuilder();
+
+            foreach (var (column, _) in conditions)
+            {
+                builder.Append($"{column} = @{column} AND ");
+            }
+
+            var resultString = builder.ToString();
+
+            return resultString.Remove(resultString.LastIndexOf("AND", StringComparison.Ordinal));
+        }
+
+        private void CheckConditions(Tuple<string, object>[] conditions)
+        {
+            if (conditions.Any(i => i == null))
+                throw new ArgumentNullException(nameof(conditions));
+            
+            if(conditions.Length == 0)
+                throw new ArgumentException("Conditions can't be empty", nameof(conditions));
         }
     }
 }

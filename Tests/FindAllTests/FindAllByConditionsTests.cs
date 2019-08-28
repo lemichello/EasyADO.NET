@@ -88,6 +88,11 @@ namespace Tests.FindAllTests
                 {
                     new Tuple<string, object>("Name", "Admin")
                 }
+            },
+            new object[]
+            {
+                "NotExisting",
+                new Tuple<string, object>[] { }
             }
         };
 
