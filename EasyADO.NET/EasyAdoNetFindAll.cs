@@ -31,11 +31,12 @@ namespace EasyADO.NET
         /// </summary>
         /// <param name="tableName">Name of the table, from which will be retrieving the data.</param>
         /// <param name="equalityConditions">Conditions, by which will be searching. First component - name of the column,
-        /// second element - value of the column.
+        /// second component - searching value of the column.
         /// </param>
         /// <returns>A <see cref="SqlDataReader"/>.</returns>
         /// <exception cref="ArgumentException">Throws, when <paramref name="tableName"/> doesn't exist in the database.</exception>
         /// <exception cref="ArgumentNullException">Throws, when <paramref name="tableName"/> or <paramref name="equalityConditions"/> are null.</exception>
+        /// <exception cref="SqlException">Throws, when <paramref name="equalityConditions"/> have non-existing column.</exception>
         public SqlDataReader FindAll(string tableName, params Tuple<string, object>[] equalityConditions)
         {
             CheckConditions(equalityConditions);

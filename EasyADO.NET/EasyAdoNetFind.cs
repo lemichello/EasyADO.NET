@@ -14,7 +14,7 @@ namespace EasyADO.NET
         /// <returns>A <see cref="SqlDataReader"/>.</returns>
         /// <exception cref="ArgumentException">Throws, when given <paramref name="tableName"/> doesn't exist in the database or <paramref name="columns"/> are empty.</exception>
         /// <exception cref="ArgumentNullException">Throws, when <paramref name="tableName"/> or <paramref name="columns"/> are null.</exception>
-        /// <exception cref="SqlException">Throws, when <paramref name="columns"/> has not existing column.</exception>
+        /// <exception cref="SqlException">Throws, when <paramref name="columns"/> have non-existing column.</exception>
         public SqlDataReader Find(string tableName, params string[] columns)
         {
             CheckColumns(columns);
@@ -38,7 +38,7 @@ namespace EasyADO.NET
         /// <returns>A <see cref="SqlDataReader"/>.</returns>
         /// <exception cref="ArgumentException">Throws, when given <paramref name="tableName"/> doesn't exist in the database or <paramref name="predicate"/> or <paramref name="columns"/>  are empty.</exception>
         /// <exception cref="ArgumentNullException">Throws, when one of the parameters is null.</exception>
-        /// <exception cref="SqlException">Throws, when <paramref name="columns"/> has not existing column or <paramref name="predicate"/> has incorrect SQL syntax.</exception>
+        /// <exception cref="SqlException">Throws, when <paramref name="columns"/> have non-existing column or <paramref name="predicate"/> has incorrect SQL syntax.</exception>
         public SqlDataReader Find(string tableName, string predicate, params string[] columns)
         {
             CheckColumns(columns);
@@ -64,7 +64,7 @@ namespace EasyADO.NET
         /// <returns>A <see cref="SqlDataReader"/>.</returns>
         /// <exception cref="ArgumentException">Throws, when given <paramref name="tableName"/> doesn't exist in the database or <paramref name="equalityConditions"/> or <paramref name="columns"/>  are empty.</exception>
         /// <exception cref="ArgumentNullException">Throws, when one of the parameters is null.</exception>
-        /// <exception cref="SqlException">Throws, when <paramref name="columns"/> has not existing column or <paramref name="equalityConditions"/> have not existing columns.</exception>
+        /// <exception cref="SqlException">Throws, when <paramref name="columns"/> or <paramref name="equalityConditions"/> have non-existing column.</exception>
         public SqlDataReader Find(string tableName, string[] columns, params Tuple<string, object>[] equalityConditions)
         {
             CheckColumns(columns);
