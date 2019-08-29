@@ -37,7 +37,7 @@ namespace Tests.FindTests
         [TestCase("Persons", "WHERE Name = 'NotExists'")]
         public void When_Find_Throws_ArgumentException(string tableName, string predicate, params string[] columns)
         {
-            Assert.Throws<ArgumentException>(() => { _easyAdoNet.Find(tableName, predicate, columns); });
+            Assert.Throws<ArgumentException>(() => _easyAdoNet.Find(tableName, predicate, columns));
         }
 
         [TestCase(null, "WHERE Name = 'NotExists'", new[] {"NotExists"})]
@@ -45,14 +45,14 @@ namespace Tests.FindTests
         [TestCase("Persons", "WHERE Name = 'NotExists'", null)]
         public void When_Find_Throws_ArgumentNullException(string tableName, string predicate, params string[] columns)
         {
-            Assert.Throws<ArgumentNullException>(() => { _easyAdoNet.Find(tableName, predicate, columns); });
+            Assert.Throws<ArgumentNullException>(() => _easyAdoNet.Find(tableName, predicate, columns));
         }
 
         [TestCase("Persons", "WHERE NotExists = 'NotExists'", new[] {"Name"})]
         [TestCase("Roles", "WHERE Name = 'NotExists'", new[] {"NotExists"})]
         public void When_Find_Throws_SqlException(string tableName, string predicate, params string[] columns)
         {
-            Assert.Throws<SqlException>(() => { _easyAdoNet.Find(tableName, predicate, columns); });
+            Assert.Throws<SqlException>(() => _easyAdoNet.Find(tableName, predicate, columns));
         }
 
         private EasyAdoNet _easyAdoNet;

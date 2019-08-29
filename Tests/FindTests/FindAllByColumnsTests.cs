@@ -35,20 +35,20 @@ namespace Tests.FindTests
         [TestCase("Persons")]
         public void When_Find_Throws_ArgumentException(string tableName, params string[] columns)
         {
-            Assert.Throws<ArgumentException>(() => { _easyAdoNet.Find(tableName, columns); });
+            Assert.Throws<ArgumentException>(() => _easyAdoNet.Find(tableName, columns));
         }
 
         [TestCase(null, new[] {"Name"})]
         [TestCase("Persons", null)]
         public void When_Find_Throws_ArgumentNullException(string tableName, params string[] columns)
         {
-            Assert.Throws<ArgumentNullException>(() => { _easyAdoNet.Find(tableName, columns); });
+            Assert.Throws<ArgumentNullException>(() => _easyAdoNet.Find(tableName, columns));
         }
 
         [TestCase("Persons", new[] {"NotExisting", "AnotherNotExisting"})]
         public void When_Find_Throws_SqlException(string tableName, params string[] columns)
         {
-            Assert.Throws<SqlException>(() => { _easyAdoNet.Find(tableName, columns); });
+            Assert.Throws<SqlException>(() => _easyAdoNet.Find(tableName, columns));
         }
 
         private EasyAdoNet _easyAdoNet;

@@ -35,14 +35,14 @@ namespace Tests.FindAllTests
         public void When_FindAll_Throws_ArgumentException(string tableName,
             params Tuple<string, object>[] conditions)
         {
-            Assert.Throws<ArgumentException>(() => { _easyAdoNet.FindAll(tableName, conditions); });
+            Assert.Throws<ArgumentException>(() => _easyAdoNet.FindAll(tableName, conditions));
         }
 
         [Test, TestCaseSource(nameof(NullParameters))]
         public void When_FindAll_Throws_ArgumentNullException(string tableName,
             params Tuple<string, object>[] conditions)
         {
-            Assert.Throws<ArgumentNullException>(() => { _easyAdoNet.FindAll(tableName, conditions); });
+            Assert.Throws<ArgumentNullException>(() => _easyAdoNet.FindAll(tableName, conditions));
         }
 
         private EasyAdoNet _easyAdoNet;

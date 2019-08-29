@@ -50,7 +50,7 @@ namespace Tests.FindAllTests
         [TestCase("Persons", "WHERE NotCorrect")]
         public void When_FindAll_Throws_SqlException(string tableName, string condition)
         {
-            Assert.Throws<SqlException>(() => { _easyAdoNet.FindAll(tableName, condition); });
+            Assert.Throws<SqlException>(() => _easyAdoNet.FindAll(tableName, condition));
         }
 
         private EasyAdoNet _easyAdoNet;

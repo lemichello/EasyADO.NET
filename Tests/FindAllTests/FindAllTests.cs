@@ -34,7 +34,7 @@ namespace Tests.FindAllTests
         [TestCase("Another")]
         public void When_FindAll_Throws_ArgumentException(string tableName)
         {
-            Assert.Throws<ArgumentException>(() => { _easyAdoNet.FindAll(tableName); });
+            Assert.Throws<ArgumentException>(() => _easyAdoNet.FindAll(tableName));
         }
 
         private EasyAdoNet _easyAdoNet;

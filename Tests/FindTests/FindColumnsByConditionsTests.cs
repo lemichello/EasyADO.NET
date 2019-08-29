@@ -34,21 +34,21 @@ namespace Tests.FindTests
         public void When_Find_Throws_ArgumentException(string tableName, string[] columns,
             params Tuple<string, object>[] conditions)
         {
-            Assert.Throws<ArgumentException>(() => { _easyAdoNet.Find(tableName, columns, conditions); });
+            Assert.Throws<ArgumentException>(() => _easyAdoNet.Find(tableName, columns, conditions));
         }
 
         [Test, TestCaseSource(nameof(NullParameters))]
         public void When_Find_Throws_ArgumentNullException(string tableName, string[] columns,
             params Tuple<string, object>[] conditions)
         {
-            Assert.Throws<ArgumentNullException>(() => { _easyAdoNet.Find(tableName, columns, conditions); });
+            Assert.Throws<ArgumentNullException>(() => _easyAdoNet.Find(tableName, columns, conditions));
         }
 
         [Test, TestCaseSource(nameof(IncorrectSqlParameters))]
         public void When_Find_Throws_SqlException(string tableName, string[] columns,
             params Tuple<string, object>[] conditions)
         {
-            Assert.Throws<SqlException>(() => { _easyAdoNet.Find(tableName, columns, conditions); });
+            Assert.Throws<SqlException>(() => _easyAdoNet.Find(tableName, columns, conditions));
         }
 
         private EasyAdoNet _easyAdoNet;
