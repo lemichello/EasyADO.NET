@@ -21,7 +21,7 @@ namespace EasyADO.NET
             CheckForTableExistent(tableName);
             CheckValues(values);
 
-            var connection = GetAndOpenConnection();
+            var connection  = GetAndOpenConnection();
             var commandText = BuildInsertQuery(tableName, values);
 
             using (var command = new SqlCommand(commandText, connection))

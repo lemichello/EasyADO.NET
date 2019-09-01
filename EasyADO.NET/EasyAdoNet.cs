@@ -88,7 +88,7 @@ namespace EasyADO.NET
                 return command.ExecuteReader();
             }
         }
-        
+
         private static string BuildConditionsQuery(IEnumerable<Tuple<string, object>> conditions)
         {
             var builder = new StringBuilder();
@@ -107,8 +107,8 @@ namespace EasyADO.NET
         {
             if (conditions.Any(i => i == null))
                 throw new ArgumentNullException(nameof(conditions));
-            
-            if(conditions.Length == 0)
+
+            if (conditions.Length == 0)
                 throw new ArgumentException("Conditions can't be empty", nameof(conditions));
         }
     }

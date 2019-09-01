@@ -45,7 +45,7 @@ namespace EasyADO.NET
             CheckForTableExistent(tableName);
             CheckPredicate(predicate);
 
-            var connection = GetAndOpenConnection();
+            var connection  = GetAndOpenConnection();
             var commandText = $"SELECT {string.Join(", ", columns)} FROM {tableName} {predicate}";
 
             using (var command = new SqlCommand(commandText, connection))
@@ -81,7 +81,7 @@ namespace EasyADO.NET
                 {
                     command.Parameters.AddWithValue($"@{column}", value);
                 }
-                
+
                 return command.ExecuteReader();
             }
         }
@@ -90,8 +90,8 @@ namespace EasyADO.NET
         {
             if (columns.Any(i => i == null))
                 throw new ArgumentNullException(nameof(columns));
-            
-            if(columns.Length == 0)
+
+            if (columns.Length == 0)
                 throw new ArgumentException("Columns can't be empty", nameof(columns));
         }
     }

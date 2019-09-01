@@ -44,7 +44,8 @@ namespace EasyADO.NET
 
             var connection = GetAndOpenConnection();
 
-            using (var command = new SqlCommand($"SELECT * FROM {tableName} WHERE {BuildConditionsQuery(equalityConditions)}", 
+            using (var command = new SqlCommand(
+                $"SELECT * FROM {tableName} WHERE {BuildConditionsQuery(equalityConditions)}",
                 connection))
             {
                 foreach (var (column, value) in equalityConditions)
