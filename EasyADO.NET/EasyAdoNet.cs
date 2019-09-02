@@ -105,7 +105,7 @@ namespace EasyADO.NET
 
         private void CheckConditions(Tuple<string, object>[] conditions)
         {
-            if (conditions.Any(i => i == null))
+            if (conditions == null || conditions.Any(i => i == null))
                 throw new ArgumentNullException(nameof(conditions));
 
             if (conditions.Length == 0)

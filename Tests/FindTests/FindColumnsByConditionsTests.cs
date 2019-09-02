@@ -168,6 +168,18 @@ namespace Tests.FindTests
                     "Name"
                 },
                 null
+            },
+            new object[]
+            {
+                "EmptyTable",
+                new[]
+                {
+                    "Name"
+                },
+                new Tuple<string, object>[]
+                {
+                    null
+                }
             }
         };
         
