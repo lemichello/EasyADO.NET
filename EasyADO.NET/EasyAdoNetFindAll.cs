@@ -18,7 +18,7 @@ namespace EasyADO.NET
 
             var connection = GetAndOpenConnection();
 
-            using (var command = new SqlCommand($"SELECT * FROM {tableName}", connection))
+            using (var command = new SqlCommand($"SELECT * FROM [{tableName}]", connection))
             {
                 command.Parameters.AddWithValue("@tableName", tableName);
 
@@ -45,7 +45,7 @@ namespace EasyADO.NET
             var connection = GetAndOpenConnection();
 
             using (var command = new SqlCommand(
-                $"SELECT * FROM {tableName} WHERE {BuildConditionsQuery(equalityConditions)}",
+                $"SELECT * FROM [{tableName}] WHERE {BuildConditionsQuery(equalityConditions)}",
                 connection))
             {
                 foreach (var (column, value) in equalityConditions)
@@ -73,7 +73,7 @@ namespace EasyADO.NET
 
             var connection = GetAndOpenConnection();
 
-            using (var command = new SqlCommand($"SELECT * FROM {tableName} {predicate}",
+            using (var command = new SqlCommand($"SELECT * FROM [{tableName}] {predicate}",
                 connection))
             {
                 return command.ExecuteReader();

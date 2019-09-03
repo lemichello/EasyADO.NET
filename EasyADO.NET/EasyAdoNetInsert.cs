@@ -53,11 +53,11 @@ namespace EasyADO.NET
 
         private static string BuildInsertQuery(string tableName, Tuple<string, object>[] values)
         {
-            var builder = new StringBuilder($"INSERT INTO {tableName} ( ");
+            var builder = new StringBuilder($"INSERT INTO [{tableName}] ( ");
 
             foreach (var (column, _) in values)
             {
-                builder.Append($"{column}, ");
+                builder.Append($"[{column}], ");
             }
 
             var resultStr = builder.ToString().Substring(0, builder.Length - 2);

@@ -21,7 +21,7 @@ namespace EasyADO.NET
             CheckForTableExistent(tableName);
 
             var connection  = GetAndOpenConnection();
-            var commandText = $"SELECT {string.Join(", ", columns)} FROM {tableName}";
+            var commandText = $"SELECT [{string.Join("], [", columns)}] FROM [{tableName}]";
 
             using (var command = new SqlCommand(commandText, connection))
             {
@@ -46,7 +46,7 @@ namespace EasyADO.NET
             CheckPredicate(predicate);
 
             var connection  = GetAndOpenConnection();
-            var commandText = $"SELECT {string.Join(", ", columns)} FROM {tableName} {predicate}";
+            var commandText = $"SELECT [{string.Join("], [", columns)}] FROM [{tableName}] {predicate}";
 
             using (var command = new SqlCommand(commandText, connection))
             {
@@ -72,7 +72,7 @@ namespace EasyADO.NET
             CheckConditions(equalityConditions);
 
             var connection = GetAndOpenConnection();
-            var commandText = $"SELECT {string.Join(", ", columns)} FROM {tableName} " +
+            var commandText = $"SELECT [{string.Join("], [", columns)}] FROM [{tableName}] " +
                               $"WHERE {BuildConditionsQuery(equalityConditions)}";
 
             using (var command = new SqlCommand(commandText, connection))

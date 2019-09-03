@@ -27,7 +27,7 @@ namespace EasyADO.NET
 
             var connection = GetAndOpenConnection();
 
-            using (var command = new SqlCommand(procedureName,
+            using (var command = new SqlCommand($"[{procedureName}]",
                 connection))
             {
                 command.CommandType = CommandType.StoredProcedure;

@@ -95,7 +95,7 @@ namespace EasyADO.NET
 
             foreach (var (column, _) in conditions)
             {
-                builder.Append($"{column} = @{column} AND ");
+                builder.Append($"[{column}] = @{column} AND ");
             }
 
             var resultString = builder.ToString();
