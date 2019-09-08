@@ -3,7 +3,7 @@ using System.Data.SqlClient;
 using EasyADO.NET;
 using NUnit.Framework;
 
-namespace Tests.FindAllTests
+namespace Tests.Unit_Tests.FindAllTests
 {
     [TestFixture]
     public class FindAllByPredicateTests : BaseTestFixture

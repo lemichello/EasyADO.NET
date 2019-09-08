@@ -2,7 +2,7 @@ using System;
 using EasyADO.NET;
 using NUnit.Framework;
 
-namespace Tests.FindAllTests
+namespace Tests.Unit_Tests.FindAllTests
 {
     [TestFixture]
     public class FindAllTests : BaseTestFixture

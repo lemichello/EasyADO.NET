@@ -20,4 +20,8 @@
       <ProjectReference Include="..\EasyADO.NET\EasyADO.NET.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <Folder Include="Unit Tests"/>
+    </ItemGroup>
+
 </Project>

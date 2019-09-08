@@ -2,7 +2,7 @@ using System;
 using EasyADO.NET;
 using NUnit.Framework;
 
-namespace Tests.InstanceTests
+namespace Tests.Unit_Tests.InstanceTests
 {
     [TestFixture]
     public class EasyAdoNetInstanceTests : BaseTestFixture

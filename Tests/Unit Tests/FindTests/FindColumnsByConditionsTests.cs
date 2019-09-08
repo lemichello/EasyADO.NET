@@ -3,7 +3,7 @@ using System.Data.SqlClient;
 using EasyADO.NET;
 using NUnit.Framework;
 
-namespace Tests.FindTests
+namespace Tests.Unit_Tests.FindTests
 {
     [TestFixture]
     public class FindColumnsByConditionsTests : BaseTestFixture
@@ -14,47 +14,8 @@ namespace Tests.FindTests
             _easyAdoNet = new EasyAdoNet(ConnectionString);
         }
 
-        [Test, TestCaseSource(nameof(CorrectParameters))]
-        public void When_Find_Has_Rows(string tableName, string[] columns, params Tuple<string, object>[] conditions)
-        {
-            var result = _easyAdoNet.Find(tableName, columns, conditions);
-
-            Assert.IsTrue(result.HasRows);
-        }
-
-        [Test, TestCaseSource(nameof(EmptyTableParameters))]
-        public void When_Find_HasNot_Rows(string tableName, string[] columns, params Tuple<string, object>[] conditions)
-        {
-            var result = _easyAdoNet.Find(tableName, columns, conditions);
-
-            Assert.IsFalse(result.HasRows);
-        }
-
-        [Test, TestCaseSource(nameof(IncorrectParameters))]
-        public void When_Find_Throws_ArgumentException(string tableName, string[] columns,
-            params Tuple<string, object>[] conditions)
-        {
-            Assert.Throws<ArgumentException>(() => _easyAdoNet.Find(tableName, columns, conditions));
-        }
-
-        [Test, TestCaseSource(nameof(NullParameters))]
-        public void When_Find_Throws_ArgumentNullException(string tableName, string[] columns,
-            params Tuple<string, object>[] conditions)
-        {
-            Assert.Throws<ArgumentNullException>(() => _easyAdoNet.Find(tableName, columns, conditions));
-        }
-
-        [Test, TestCaseSource(nameof(IncorrectSqlParameters))]
-        public void When_Find_Throws_SqlException(string tableName, string[] columns,
-            params Tuple<string, object>[] conditions)
-        {
-            Assert.Throws<SqlException>(() => _easyAdoNet.Find(tableName, columns, conditions));
-        }
-
         private EasyAdoNet _easyAdoNet;
 
-        #region FindParameters
-        
         private static readonly object[] CorrectParameters =
         {
             new object[]
@@ -136,7 +97,7 @@ namespace Tests.FindTests
                 }
             }
         };
-        
+
         private static readonly object[] NullParameters =
         {
             new object[]
@@ -182,7 +143,7 @@ namespace Tests.FindTests
                 }
             }
         };
-        
+
         private static readonly object[] IncorrectSqlParameters =
         {
             new object[]
@@ -211,7 +172,42 @@ namespace Tests.FindTests
                 }
             }
         };
-        
-        #endregion
+
+        [Test, TestCaseSource(nameof(CorrectParameters))]
+        public void When_Find_Has_Rows(string tableName, string[] columns, params Tuple<string, object>[] conditions)
+        {
+            var result = _easyAdoNet.Find(tableName, columns, conditions);
+
+            Assert.IsTrue(result.HasRows);
+        }
+
+        [Test, TestCaseSource(nameof(EmptyTableParameters))]
+        public void When_Find_HasNot_Rows(string tableName, string[] columns, params Tuple<string, object>[] conditions)
+        {
+            var result = _easyAdoNet.Find(tableName, columns, conditions);
+
+            Assert.IsFalse(result.HasRows);
+        }
+
+        [Test, TestCaseSource(nameof(IncorrectParameters))]
+        public void When_Find_Throws_ArgumentException(string tableName, string[] columns,
+            params Tuple<string, object>[] conditions)
+        {
+            Assert.Throws<ArgumentException>(() => _easyAdoNet.Find(tableName, columns, conditions));
+        }
+
+        [Test, TestCaseSource(nameof(NullParameters))]
+        public void When_Find_Throws_ArgumentNullException(string tableName, string[] columns,
+            params Tuple<string, object>[] conditions)
+        {
+            Assert.Throws<ArgumentNullException>(() => _easyAdoNet.Find(tableName, columns, conditions));
+        }
+
+        [Test, TestCaseSource(nameof(IncorrectSqlParameters))]
+        public void When_Find_Throws_SqlException(string tableName, string[] columns,
+            params Tuple<string, object>[] conditions)
+        {
+            Assert.Throws<SqlException>(() => _easyAdoNet.Find(tableName, columns, conditions));
+        }
     }
 }

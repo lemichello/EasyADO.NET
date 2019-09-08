@@ -4,29 +4,29 @@ using EasyADO.NET;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 
-namespace Tests.ExecTests
+namespace Tests.Unit_Tests.ExecTests
 {
     [TestFixture]
     public class ExecViewTests : BaseTestFixture
     {
-        [OneTimeSetUp]
-        public void OneTimeInit()
-        {
-            Context.Database.ExecuteSqlCommand("CREATE VIEW [PersonsNames] AS SELECT Name, Surname FROM Persons;");
-            Context.Database.ExecuteSqlCommand("CREATE VIEW [EmptyView] AS SELECT EmptyName FROM EmptyTable;");
-        }
-        
         [SetUp]
         public void Init()
         {
             _easyAdoNet = new EasyAdoNet(ConnectionString);
         }
 
+        [OneTimeSetUp]
+        public void OneTimeInit()
+        {
+            Context.Database.ExecuteSqlCommand("CREATE VIEW [PersonsNames] AS SELECT Name, Surname FROM Persons;");
+            Context.Database.ExecuteSqlCommand("CREATE VIEW [EmptyView] AS SELECT EmptyName FROM EmptyTable;");
+        }
+
         [TestCase("PersonsNames")]
         public void When_ExecView_Has_Rows(string viewName)
         {
             var result = _easyAdoNet.ExecView(viewName);
-            
+
             Assert.IsTrue(result.HasRows);
         }
 

@@ -3,7 +3,7 @@ using System.Data.SqlClient;
 using EasyADO.NET;
 using NUnit.Framework;
 
-namespace Tests.UpdateTests
+namespace Tests.Unit_Tests.UpdateTests
 {
     [TestFixture]
     public class UpdateByConditionsTests : BaseTestFixture

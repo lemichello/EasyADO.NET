@@ -3,7 +3,7 @@ using System.Data.SqlClient;
 using EasyADO.NET;
 using NUnit.Framework;
 
-namespace Tests.UpdateTests
+namespace Tests.Unit_Tests.UpdateTests
 {
     [TestFixture]
     public class UpdateByPredicateTests : BaseTestFixture
@@ -14,36 +14,8 @@ namespace Tests.UpdateTests
             _easyAdoNet = new EasyAdoNet(ConnectionString);
         }
 
-        [Test, TestCaseSource(nameof(CorrectParameters))]
-        public void When_Update_Updates_Record(string tableName, string predicate,
-            params Tuple<string, object>[] updatingValues)
-        {
-            Assert.DoesNotThrow(() => _easyAdoNet.Update(tableName, predicate, updatingValues));
-        }
-
-        [Test, TestCaseSource(nameof(IncorrectParameters))]
-        public void When_Update_Throws_ArgumentException(string tableName, string predicate,
-            params Tuple<string, object>[] updatingValues)
-        {
-            Assert.Throws<ArgumentException>(() => _easyAdoNet.Update(tableName, predicate, updatingValues));
-        }
-
-        [Test, TestCaseSource(nameof(NullParameters))]
-        public void When_Update_Throws_ArgumentNullException(string tableName, string predicate,
-            params Tuple<string, object>[] updatingValues)
-        {
-            Assert.Throws<ArgumentNullException>(() => _easyAdoNet.Update(tableName, predicate, updatingValues));
-        }
-
-        [Test, TestCaseSource(nameof(IncorrectSqlParameters))]
-        public void When_Update_Throws_SqlException(string tableName, string predicate,
-            params Tuple<string, object>[] updatingValues)
-        {
-            Assert.Throws<SqlException>(() => _easyAdoNet.Update(tableName, predicate, updatingValues));
-        }
-
         private EasyAdoNet _easyAdoNet;
-        
+
         private static readonly object[] CorrectParameters =
         {
             new object[]
@@ -140,5 +112,33 @@ namespace Tests.UpdateTests
                 }
             }
         };
+
+        [Test, TestCaseSource(nameof(IncorrectParameters))]
+        public void When_Update_Throws_ArgumentException(string tableName, string predicate,
+            params Tuple<string, object>[] updatingValues)
+        {
+            Assert.Throws<ArgumentException>(() => _easyAdoNet.Update(tableName, predicate, updatingValues));
+        }
+
+        [Test, TestCaseSource(nameof(NullParameters))]
+        public void When_Update_Throws_ArgumentNullException(string tableName, string predicate,
+            params Tuple<string, object>[] updatingValues)
+        {
+            Assert.Throws<ArgumentNullException>(() => _easyAdoNet.Update(tableName, predicate, updatingValues));
+        }
+
+        [Test, TestCaseSource(nameof(IncorrectSqlParameters))]
+        public void When_Update_Throws_SqlException(string tableName, string predicate,
+            params Tuple<string, object>[] updatingValues)
+        {
+            Assert.Throws<SqlException>(() => _easyAdoNet.Update(tableName, predicate, updatingValues));
+        }
+
+        [Test, TestCaseSource(nameof(CorrectParameters))]
+        public void When_Update_Updates_Record(string tableName, string predicate,
+            params Tuple<string, object>[] updatingValues)
+        {
+            Assert.DoesNotThrow(() => _easyAdoNet.Update(tableName, predicate, updatingValues));
+        }
     }
 }

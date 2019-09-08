@@ -3,7 +3,7 @@ using System.Data.SqlClient;
 using EasyADO.NET;
 using NUnit.Framework;
 
-namespace Tests.InsertTests
+namespace Tests.Unit_Tests.InsertTests
 {
     [TestFixture]
     public class InsertValuesTests : BaseTestFixture
@@ -12,30 +12,6 @@ namespace Tests.InsertTests
         public void Init()
         {
             _easyAdoNet = new EasyAdoNet(ConnectionString);
-        }
-        
-        [Test, TestCaseSource(nameof(CorrectParameters))]
-        public void When_Insert_Inserts_Values(string tableName, params Tuple<string, object>[] values)
-        {
-            Assert.DoesNotThrow(() => _easyAdoNet.Insert(tableName, values));
-        }
-
-        [Test, TestCaseSource(nameof(IncorrectParameters))]
-        public void When_Insert_Throws_ArgumentException(string tableName, params Tuple<string, object>[] values)
-        {
-            Assert.Throws<ArgumentException>(() => _easyAdoNet.Insert(tableName, values));
-        }
-
-        [Test, TestCaseSource(nameof(NullParameters))]
-        public void When_Insert_Throws_ArgumentNullException(string tableName, params Tuple<string, object>[] values)
-        {
-            Assert.Throws<ArgumentNullException>(() => _easyAdoNet.Insert(tableName, values));
-        }
-
-        [Test, TestCaseSource(nameof(IncorrectSqlParameters))]
-        public void When_Insert_Throws_SqlException(string tableName, params Tuple<string, object>[] values)
-        {
-            Assert.Throws<SqlException>(() => _easyAdoNet.Insert(tableName, values));
         }
 
         private EasyAdoNet _easyAdoNet;
@@ -61,7 +37,7 @@ namespace Tests.InsertTests
                 }
             }
         };
-        
+
         private static readonly object[] IncorrectParameters =
         {
             new object[]
@@ -78,7 +54,7 @@ namespace Tests.InsertTests
                 }
             }
         };
-        
+
         private static readonly object[] NullParameters =
         {
             new object[]
@@ -95,7 +71,7 @@ namespace Tests.InsertTests
                 null
             }
         };
-        
+
         private static readonly object[] IncorrectSqlParameters =
         {
             new object[]
@@ -117,5 +93,29 @@ namespace Tests.InsertTests
                 }
             }
         };
+
+        [Test, TestCaseSource(nameof(CorrectParameters))]
+        public void When_Insert_Inserts_Values(string tableName, params Tuple<string, object>[] values)
+        {
+            Assert.DoesNotThrow(() => _easyAdoNet.Insert(tableName, values));
+        }
+
+        [Test, TestCaseSource(nameof(IncorrectParameters))]
+        public void When_Insert_Throws_ArgumentException(string tableName, params Tuple<string, object>[] values)
+        {
+            Assert.Throws<ArgumentException>(() => _easyAdoNet.Insert(tableName, values));
+        }
+
+        [Test, TestCaseSource(nameof(NullParameters))]
+        public void When_Insert_Throws_ArgumentNullException(string tableName, params Tuple<string, object>[] values)
+        {
+            Assert.Throws<ArgumentNullException>(() => _easyAdoNet.Insert(tableName, values));
+        }
+
+        [Test, TestCaseSource(nameof(IncorrectSqlParameters))]
+        public void When_Insert_Throws_SqlException(string tableName, params Tuple<string, object>[] values)
+        {
+            Assert.Throws<SqlException>(() => _easyAdoNet.Insert(tableName, values));
+        }
     }
 }

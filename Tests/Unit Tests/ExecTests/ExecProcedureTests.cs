@@ -4,11 +4,17 @@ using EasyADO.NET;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 
-namespace Tests.ExecTests
+namespace Tests.Unit_Tests.ExecTests
 {
     [TestFixture]
     public class ExecProcedureTests : BaseTestFixture
     {
+        [SetUp]
+        public void Init()
+        {
+            _easyAdoNet = new EasyAdoNet(ConnectionString);
+        }
+
         [OneTimeSetUp]
         public void OneTimeInit()
         {
@@ -22,48 +28,6 @@ namespace Tests.ExecTests
 
             Context.Database.ExecuteSqlCommand(
                 "CREATE PROCEDURE [EmptyProcedure] AS SELECT EmptyName FROM EmptyTable;");
-        }
-
-        [SetUp]
-        public void Init()
-        {
-            _easyAdoNet = new EasyAdoNet(ConnectionString);
-        }
-
-        [Test, TestCaseSource(nameof(CorrectParametersForSelect))]
-        public void When_ExecProcedure_Has_Rows(string procedureName, params Tuple<string, object>[] parameters)
-        {
-            var result = _easyAdoNet.ExecProcedure(procedureName, parameters);
-
-            Assert.IsTrue(result.HasRows);
-        }
-
-        [Test, TestCaseSource(nameof(ParametersForEmptySelect))]
-        public void When_ExecProcedure_HasNot_Rows(string procedureName, params Tuple<string, object>[] parameters)
-        {
-            var result = _easyAdoNet.ExecProcedure(procedureName, parameters);
-
-            Assert.IsFalse(result.HasRows);
-        }
-
-        [Test, TestCaseSource(nameof(CorrectParametersForInsert))]
-        public void When_ExecProcedure_Inserts_Values(string procedureName, params Tuple<string, object>[] parameters)
-        {
-            Assert.DoesNotThrow(() => _easyAdoNet.ExecProcedure(procedureName, parameters));
-        }
-
-        [Test, TestCaseSource(nameof(NullParameters))]
-        public void When_ExecProcedure_Throws_ArgumentNullException(string procedureName,
-            params Tuple<string, object>[] parameters)
-        {
-            Assert.Throws<ArgumentNullException>(() => _easyAdoNet.ExecProcedure(procedureName, parameters));
-        }
-
-        [Test, TestCaseSource(nameof(IncorrectSqlParameters))]
-        public void When_ExecProcedure_Throws_SqlException(string procedureName,
-            params Tuple<string, object>[] parameters)
-        {
-            Assert.Throws<SqlException>(() => _easyAdoNet.ExecProcedure(procedureName, parameters));
         }
 
         private EasyAdoNet _easyAdoNet;
@@ -151,5 +115,41 @@ namespace Tests.ExecTests
                 }
             }
         };
+
+        [Test, TestCaseSource(nameof(CorrectParametersForSelect))]
+        public void When_ExecProcedure_Has_Rows(string procedureName, params Tuple<string, object>[] parameters)
+        {
+            var result = _easyAdoNet.ExecProcedure(procedureName, parameters);
+
+            Assert.IsTrue(result.HasRows);
+        }
+
+        [Test, TestCaseSource(nameof(ParametersForEmptySelect))]
+        public void When_ExecProcedure_HasNot_Rows(string procedureName, params Tuple<string, object>[] parameters)
+        {
+            var result = _easyAdoNet.ExecProcedure(procedureName, parameters);
+
+            Assert.IsFalse(result.HasRows);
+        }
+
+        [Test, TestCaseSource(nameof(CorrectParametersForInsert))]
+        public void When_ExecProcedure_Inserts_Values(string procedureName, params Tuple<string, object>[] parameters)
+        {
+            Assert.DoesNotThrow(() => _easyAdoNet.ExecProcedure(procedureName, parameters));
+        }
+
+        [Test, TestCaseSource(nameof(NullParameters))]
+        public void When_ExecProcedure_Throws_ArgumentNullException(string procedureName,
+            params Tuple<string, object>[] parameters)
+        {
+            Assert.Throws<ArgumentNullException>(() => _easyAdoNet.ExecProcedure(procedureName, parameters));
+        }
+
+        [Test, TestCaseSource(nameof(IncorrectSqlParameters))]
+        public void When_ExecProcedure_Throws_SqlException(string procedureName,
+            params Tuple<string, object>[] parameters)
+        {
+            Assert.Throws<SqlException>(() => _easyAdoNet.ExecProcedure(procedureName, parameters));
+        }
     }
 }

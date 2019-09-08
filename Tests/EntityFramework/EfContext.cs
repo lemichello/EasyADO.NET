@@ -23,7 +23,8 @@ namespace Tests.EntityFramework
             modelBuilder.Entity<Person>().HasData(
                 admin,
                 new Person {Id = 2, Name = "Angelina", Surname = "Ukrainets"},
-                new Person {Id = 3, Name = "Dasha", Surname    = "Shevchuk"});
+                new Person {Id = 3, Name = "Dasha", Surname    = "Shevchuk"},
+                new Person {Id = 4, Name = "Maksym", Surname   = "Wilson"});
 
             modelBuilder.Entity<Role>().HasData(new Role {Id = 1, Name = "Admin", PersonId = 1});
         }
