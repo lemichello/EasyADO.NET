@@ -15,7 +15,7 @@ namespace EasyADO.NET
         /// <exception cref="ArgumentException">Throws, when given <paramref name="tableName"/> doesn't exist in the database or <paramref name="columns"/> are empty.</exception>
         /// <exception cref="ArgumentNullException">Throws, when <paramref name="tableName"/> or <paramref name="columns"/> are null.</exception>
         /// <exception cref="SqlException">Throws, when <paramref name="columns"/> have non-existing column.</exception>
-        public SqlDataReader Find(string tableName, params string[] columns)
+        public SqlDataReader Find(string tableName, string[] columns)
         {
             CheckColumns(columns);
             CheckForTableExistent(tableName);
@@ -36,10 +36,10 @@ namespace EasyADO.NET
         /// <param name="predicate">Part of SQL query, which starts with 'WHERE' statement, e.g. 'WHERE ColumnName = Value AND AnotherColumnName = AnotherValue'.</param>
         /// <param name="columns">Names of the columns.</param>
         /// <returns>A <see cref="SqlDataReader"/>.</returns>
-        /// <exception cref="ArgumentException">Throws, when given <paramref name="tableName"/> doesn't exist in the database or <paramref name="predicate"/> or <paramref name="columns"/>  are empty.</exception>
+        /// <exception cref="ArgumentException">Throws, when given <paramref name="tableName"/> doesn't exist in the database or <paramref name="predicate"/> or <paramref name="columns"/> are empty.</exception>
         /// <exception cref="ArgumentNullException">Throws, when one of the parameters is null.</exception>
         /// <exception cref="SqlException">Throws, when <paramref name="columns"/> have non-existing column or <paramref name="predicate"/> has incorrect SQL syntax.</exception>
-        public SqlDataReader Find(string tableName, string predicate, params string[] columns)
+        public SqlDataReader Find(string tableName, string predicate, string[] columns)
         {
             CheckColumns(columns);
             CheckForTableExistent(tableName);
@@ -65,7 +65,7 @@ namespace EasyADO.NET
         /// <exception cref="ArgumentException">Throws, when given <paramref name="tableName"/> doesn't exist in the database or <paramref name="equalityConditions"/> or <paramref name="columns"/>  are empty.</exception>
         /// <exception cref="ArgumentNullException">Throws, when one of the parameters is null.</exception>
         /// <exception cref="SqlException">Throws, when <paramref name="columns"/> or <paramref name="equalityConditions"/> have non-existing column.</exception>
-        public SqlDataReader Find(string tableName, string[] columns, params Tuple<string, object>[] equalityConditions)
+        public SqlDataReader Find(string tableName, string[] columns, Tuple<string, object>[] equalityConditions)
         {
             CheckColumns(columns);
             CheckForTableExistent(tableName);
