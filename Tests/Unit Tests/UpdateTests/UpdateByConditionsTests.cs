@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using EasyADO.NET;
 using NUnit.Framework;
@@ -21,26 +22,26 @@ namespace Tests.Unit_Tests.UpdateTests
             new object[]
             {
                 "Persons",
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("Name", "Maksym"),
-                    new Tuple<string, object>("Surname", "Lemich")
+                    {"Name", "Maksym"},
+                    {"Surname", "Lemich"}
                 },
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("Name", "Mark")
+                    {"Name", "Mark"}
                 }
             },
             new object[]
             {
                 "Roles",
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("Name", "Admin")
+                    {"Name", "Admin"}
                 },
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("Name", "NotAdmin")
+                    {"Name", "NotAdmin"}
                 }
             }
         };
@@ -50,33 +51,33 @@ namespace Tests.Unit_Tests.UpdateTests
             new object[]
             {
                 "NotExists",
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("Name", "Admin")
+                    {"Name", "Admin"}
                 },
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("Name", "Mark"),
-                    new Tuple<string, object>("Surname", "Smith")
+                    {"Name", "Mark"},
+                    {"Surname", "Smith"}
                 }
             },
             new object[]
             {
                 "Persons",
-                new Tuple<string, object>[] { },
-                new[]
+                new Dictionary<string, object>(),
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("Name", "Mark")
+                    {"Name", "Mark"}
                 }
             },
             new object[]
             {
                 "Persons",
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("Name", "Admin")
+                    {"Name", "Admin"}
                 },
-                new Tuple<string, object>[] { }
+                new Dictionary<string, object>()
             }
         };
 
@@ -85,48 +86,34 @@ namespace Tests.Unit_Tests.UpdateTests
             new object[]
             {
                 null,
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("Name", "Admin")
+                    {"Name", "Admin"}
                 },
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("Name", "Mark"),
-                    new Tuple<string, object>("Surname", "Smith")
+                    {"Name", "Mark"},
+                    {"Surname", "Smith"}
                 }
             },
             new object[]
             {
                 "Persons",
                 null,
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("Name", "Mark"),
-                    new Tuple<string, object>("Surname", "Smith")
+                    {"Name", "Mark"},
+                    {"Surname", "Smith"}
                 }
             },
             new object[]
             {
                 "Persons",
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("Name", "Admin")
+                    {"Name", "Admin"},
                 },
                 null
-            },
-            new object[]
-            {
-                "Persons",
-                new[]
-                {
-                    new Tuple<string, object>("Name", "Admin"),
-                    null
-                },
-                new[]
-                {
-                    new Tuple<string, object>("Name", "Mark"),
-                    new Tuple<string, object>("Surname", "Smith")
-                }
             }
         };
 
@@ -135,42 +122,43 @@ namespace Tests.Unit_Tests.UpdateTests
             new object[]
             {
                 "Persons",
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("NotExists", "Admin")
+                    {"NotExists", "Admin"}
                 },
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("Name", "Mark"),
-                    new Tuple<string, object>("Surname", "Smith")
+                    {"Name", "Mark"},
+                    {"Surname", "Smith"}
                 }
             },
             new object[]
             {
                 "Persons",
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("Name", "Maksym")
+                    {"Name", "Admin"}
                 },
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("NotExists", "Mark"),
-                    new Tuple<string, object>("Surname", "Smith")
+                    {"NotExists", "Mark"},
+                    {"Surname", "Smith"}
                 }
             }
         };
 
         [Test, TestCaseSource(nameof(IncorrectParameters))]
-        public void When_Update_Throws_ArgumentException(string tableName, Tuple<string, object>[] equalityConditions,
-            params Tuple<string, object>[] updatingValues)
+        public void When_Update_Throws_ArgumentException(string tableName,
+            Dictionary<string, object> equalityConditions,
+            Dictionary<string, object> updatingValues)
         {
             Assert.Throws<ArgumentException>(() => _easyAdoNet.Update(tableName, equalityConditions, updatingValues));
         }
 
         [Test, TestCaseSource(nameof(NullParameters))]
         public void When_Update_Throws_ArgumentNullException(string tableName,
-            Tuple<string, object>[] equalityConditions,
-            params Tuple<string, object>[] updatingValues)
+            Dictionary<string, object> equalityConditions,
+            Dictionary<string, object> updatingValues)
         {
             Assert.Throws<ArgumentNullException>(
                 () => _easyAdoNet.Update(tableName, equalityConditions, updatingValues));
@@ -178,15 +166,15 @@ namespace Tests.Unit_Tests.UpdateTests
 
         [Test, TestCaseSource(nameof(IncorrectSqlParameters))]
         public void When_Update_Throws_SqlException(string tableName,
-            Tuple<string, object>[] equalityConditions,
-            params Tuple<string, object>[] updatingValues)
+            Dictionary<string, object> equalityConditions,
+            Dictionary<string, object> updatingValues)
         {
             Assert.Throws<SqlException>(() => _easyAdoNet.Update(tableName, equalityConditions, updatingValues));
         }
 
         [Test, TestCaseSource(nameof(CorrectParameters))]
-        public void When_Update_Updates_Record(string tableName, Tuple<string, object>[] equalityConditions,
-            params Tuple<string, object>[] updatingValues)
+        public void When_Update_Updates_Record(string tableName, Dictionary<string, object> equalityConditions,
+            Dictionary<string, object> updatingValues)
         {
             Assert.DoesNotThrow(() => _easyAdoNet.Update(tableName, equalityConditions, updatingValues));
         }

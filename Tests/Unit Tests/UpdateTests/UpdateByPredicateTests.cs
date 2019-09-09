@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using EasyADO.NET;
 using NUnit.Framework;
@@ -22,19 +23,19 @@ namespace Tests.Unit_Tests.UpdateTests
             {
                 "Persons",
                 "WHERE Name = 'Maksym'",
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("Name", "Mark"),
-                    new Tuple<string, object>("Surname", "Smith")
+                    {"Name", "Mark"},
+                    {"Surname", "Smith"}
                 }
             },
             new object[]
             {
                 "Roles",
                 "WHERE Name = 'Admin'",
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("Name", "NotAdmin"),
+                    {"Name", "NotAdmin"}
                 }
             }
         };
@@ -45,17 +46,17 @@ namespace Tests.Unit_Tests.UpdateTests
             {
                 "NotExists",
                 "WHERE Name = 'Maksym'",
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("Name", "Mark"),
-                    new Tuple<string, object>("Surname", "Smith")
+                    {"Name", "Mark"},
+                    {"Surname", "Smith"}
                 }
             },
             new object[]
             {
                 "Persons",
                 "WHERE Name = 'Maksym'",
-                new Tuple<string, object>[] { }
+                new Dictionary<string, object>()
             }
         };
 
@@ -65,20 +66,20 @@ namespace Tests.Unit_Tests.UpdateTests
             {
                 null,
                 "WHERE Name = 'Maksym'",
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("Name", "Mark"),
-                    new Tuple<string, object>("Surname", "Smith")
+                    {"Name", "Mark"},
+                    {"Surname", "Smith"}
                 }
             },
             new object[]
             {
                 "Persons",
                 null,
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("Name", "Mark"),
-                    new Tuple<string, object>("Surname", "Smith")
+                    {"Name", "Mark"},
+                    {"Surname", "Smith"}
                 }
             },
             new object[]
@@ -86,6 +87,16 @@ namespace Tests.Unit_Tests.UpdateTests
                 "Persons",
                 "WHERE Name = 'Maksym'",
                 null
+            },
+            new object[]
+            {
+                "Persons",
+                "WHERE Name = 'Maksym'",
+                new Dictionary<string, object>
+                {
+                    {"Name", "Mark"},
+                    {"Surname", null}
+                }
             }
         };
 
@@ -95,48 +106,48 @@ namespace Tests.Unit_Tests.UpdateTests
             {
                 "Persons",
                 "WHERE NotExists = 'Maksym'",
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("Name", "Mark"),
-                    new Tuple<string, object>("Surname", "Smith")
+                    {"Name", "Mark"},
+                    {"Surname", "Smith"}
                 }
             },
             new object[]
             {
                 "Persons",
                 "WHERE Name = 'Maksym'",
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("NotExists", "Mark"),
-                    new Tuple<string, object>("Surname", "Smith")
+                    {"NotExists", "Mark"},
+                    {"Surname", "Smith"}
                 }
             }
         };
 
         [Test, TestCaseSource(nameof(IncorrectParameters))]
         public void When_Update_Throws_ArgumentException(string tableName, string predicate,
-            params Tuple<string, object>[] updatingValues)
+            Dictionary<string, object> updatingValues)
         {
             Assert.Throws<ArgumentException>(() => _easyAdoNet.Update(tableName, predicate, updatingValues));
         }
 
         [Test, TestCaseSource(nameof(NullParameters))]
         public void When_Update_Throws_ArgumentNullException(string tableName, string predicate,
-            params Tuple<string, object>[] updatingValues)
+            Dictionary<string, object> updatingValues)
         {
             Assert.Throws<ArgumentNullException>(() => _easyAdoNet.Update(tableName, predicate, updatingValues));
         }
 
         [Test, TestCaseSource(nameof(IncorrectSqlParameters))]
         public void When_Update_Throws_SqlException(string tableName, string predicate,
-            params Tuple<string, object>[] updatingValues)
+            Dictionary<string, object> updatingValues)
         {
             Assert.Throws<SqlException>(() => _easyAdoNet.Update(tableName, predicate, updatingValues));
         }
 
         [Test, TestCaseSource(nameof(CorrectParameters))]
         public void When_Update_Updates_Record(string tableName, string predicate,
-            params Tuple<string, object>[] updatingValues)
+            Dictionary<string, object> updatingValues)
         {
             Assert.DoesNotThrow(() => _easyAdoNet.Update(tableName, predicate, updatingValues));
         }

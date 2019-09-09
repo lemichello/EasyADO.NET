@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using EasyADO.NET;
 using NUnit.Framework;
@@ -21,19 +22,19 @@ namespace Tests.Unit_Tests.InsertTests
             new object[]
             {
                 "Persons",
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("Name", "NewName"),
-                    new Tuple<string, object>("Surname", "NewSurname")
+                    {"Name", "NewName"},
+                    {"Surname", "NewSurname"}
                 }
             },
             new object[]
             {
                 "Roles",
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("Name", "NewRole"),
-                    new Tuple<string, object>("PersonId", 2)
+                    {"Name", "NewRole"},
+                    {"PersonId", 2}
                 }
             }
         };
@@ -43,14 +44,14 @@ namespace Tests.Unit_Tests.InsertTests
             new object[]
             {
                 "Persons",
-                new Tuple<string, object>[] { }
+                new Dictionary<string, object>()
             },
             new object[]
             {
                 "NotExisting",
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("Name", "Admin")
+                    {"Name", "Admin"}
                 }
             }
         };
@@ -60,15 +61,23 @@ namespace Tests.Unit_Tests.InsertTests
             new object[]
             {
                 null,
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("Name", "Admin")
+                    {"Name", "Admin"}
                 }
             },
             new object[]
             {
                 "Persons",
                 null
+            },
+            new object[]
+            {
+                "Persons",
+                new Dictionary<string, object>
+                {
+                    {"Name", null}
+                }
             }
         };
 
@@ -77,43 +86,43 @@ namespace Tests.Unit_Tests.InsertTests
             new object[]
             {
                 "Persons",
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("NotExists", "NewName"),
-                    new Tuple<string, object>("Surname", "NewSurname")
+                    {"NotExists", "NewName"},
+                    {"Surname", "NewSurname"}
                 }
             },
             new object[]
             {
                 "Roles",
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("Name", "NewRole"),
-                    new Tuple<string, object>("NotExists", 2)
+                    {"Name", "NewRole"},
+                    {"NotExists", 2}
                 }
             }
         };
 
         [Test, TestCaseSource(nameof(CorrectParameters))]
-        public void When_Insert_Inserts_Values(string tableName, params Tuple<string, object>[] values)
+        public void When_Insert_Inserts_Values(string tableName, Dictionary<string, object> values)
         {
             Assert.DoesNotThrow(() => _easyAdoNet.Insert(tableName, values));
         }
 
         [Test, TestCaseSource(nameof(IncorrectParameters))]
-        public void When_Insert_Throws_ArgumentException(string tableName, params Tuple<string, object>[] values)
+        public void When_Insert_Throws_ArgumentException(string tableName, Dictionary<string, object> values)
         {
             Assert.Throws<ArgumentException>(() => _easyAdoNet.Insert(tableName, values));
         }
 
         [Test, TestCaseSource(nameof(NullParameters))]
-        public void When_Insert_Throws_ArgumentNullException(string tableName, params Tuple<string, object>[] values)
+        public void When_Insert_Throws_ArgumentNullException(string tableName, Dictionary<string, object> values)
         {
             Assert.Throws<ArgumentNullException>(() => _easyAdoNet.Insert(tableName, values));
         }
 
         [Test, TestCaseSource(nameof(IncorrectSqlParameters))]
-        public void When_Insert_Throws_SqlException(string tableName, params Tuple<string, object>[] values)
+        public void When_Insert_Throws_SqlException(string tableName, Dictionary<string, object> values)
         {
             Assert.Throws<SqlException>(() => _easyAdoNet.Insert(tableName, values));
         }

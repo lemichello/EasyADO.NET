@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using EasyADO.NET;
 using NUnit.Framework;
@@ -26,10 +27,10 @@ namespace Tests.Unit_Tests.FindTests
                     "Name",
                     "Surname"
                 },
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("Name", "Maksym"),
-                    new Tuple<string, object>("Surname", "Lemich")
+                    {"Name", "Maksym"},
+                    {"Surname", "Lemich"}
                 }
             },
             new object[]
@@ -39,9 +40,9 @@ namespace Tests.Unit_Tests.FindTests
                 {
                     "PersonId"
                 },
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("Name", "Admin"),
+                    {"Name", "Admin"}
                 }
             }
         };
@@ -55,9 +56,9 @@ namespace Tests.Unit_Tests.FindTests
                 {
                     "EmptyName"
                 },
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("EmptyName", "Maksym"),
+                    {"EmptyName", "Maksym"}
                 }
             }
         };
@@ -72,15 +73,15 @@ namespace Tests.Unit_Tests.FindTests
                     "Name",
                     "Surname"
                 },
-                new Tuple<string, object>[] { }
+                new Dictionary<string, object>()
             },
             new object[]
             {
                 "Persons",
                 new string[] { },
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("Name", "Admin")
+                    {"Name", "Admin"}
                 }
             },
             new object[]
@@ -91,9 +92,9 @@ namespace Tests.Unit_Tests.FindTests
                     "Name",
                     "Surname"
                 },
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("Name", "Admin")
+                    {"Name", "Admin"}
                 }
             }
         };
@@ -107,18 +108,30 @@ namespace Tests.Unit_Tests.FindTests
                 {
                     "Name"
                 },
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("EmptyName", "Maksym"),
+                    {"EmptyName", "Admin"}
                 }
             },
             new object[]
             {
                 "EmptyTable",
                 null,
+                new Dictionary<string, object>
+                {
+                    {"EmptyName", "Admin"}
+                }
+            },
+            new object[]
+            {
+                "EmptyTable",
                 new[]
                 {
-                    new Tuple<string, object>("EmptyName", "Maksym"),
+                    "Name"
+                },
+                new Dictionary<string, object>
+                {
+                    {"Name", null}
                 }
             },
             new object[]
@@ -129,18 +142,6 @@ namespace Tests.Unit_Tests.FindTests
                     "Name"
                 },
                 null
-            },
-            new object[]
-            {
-                "EmptyTable",
-                new[]
-                {
-                    "Name"
-                },
-                new Tuple<string, object>[]
-                {
-                    null
-                }
             }
         };
 
@@ -153,9 +154,9 @@ namespace Tests.Unit_Tests.FindTests
                 {
                     "NotExists"
                 },
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("Name", "Maksym"),
+                    {"Name", "Maksym"}
                 }
             },
             new object[]
@@ -166,15 +167,15 @@ namespace Tests.Unit_Tests.FindTests
                     "Name",
                     "Surname"
                 },
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("NotExists", "Maksym"),
+                    {"NotExists", "Maksym"}
                 }
             }
         };
 
         [Test, TestCaseSource(nameof(CorrectParameters))]
-        public void When_Find_Has_Rows(string tableName, string[] columns, params Tuple<string, object>[] conditions)
+        public void When_Find_Has_Rows(string tableName, string[] columns, Dictionary<string, object> conditions)
         {
             var result = _easyAdoNet.Find(tableName, columns, conditions);
 
@@ -182,7 +183,7 @@ namespace Tests.Unit_Tests.FindTests
         }
 
         [Test, TestCaseSource(nameof(EmptyTableParameters))]
-        public void When_Find_HasNot_Rows(string tableName, string[] columns, params Tuple<string, object>[] conditions)
+        public void When_Find_HasNot_Rows(string tableName, string[] columns, Dictionary<string, object> conditions)
         {
             var result = _easyAdoNet.Find(tableName, columns, conditions);
 
@@ -191,21 +192,21 @@ namespace Tests.Unit_Tests.FindTests
 
         [Test, TestCaseSource(nameof(IncorrectParameters))]
         public void When_Find_Throws_ArgumentException(string tableName, string[] columns,
-            params Tuple<string, object>[] conditions)
+            Dictionary<string, object> conditions)
         {
             Assert.Throws<ArgumentException>(() => _easyAdoNet.Find(tableName, columns, conditions));
         }
 
         [Test, TestCaseSource(nameof(NullParameters))]
         public void When_Find_Throws_ArgumentNullException(string tableName, string[] columns,
-            params Tuple<string, object>[] conditions)
+            Dictionary<string, object> conditions)
         {
             Assert.Throws<ArgumentNullException>(() => _easyAdoNet.Find(tableName, columns, conditions));
         }
 
         [Test, TestCaseSource(nameof(IncorrectSqlParameters))]
         public void When_Find_Throws_SqlException(string tableName, string[] columns,
-            params Tuple<string, object>[] conditions)
+            Dictionary<string, object> conditions)
         {
             Assert.Throws<SqlException>(() => _easyAdoNet.Find(tableName, columns, conditions));
         }

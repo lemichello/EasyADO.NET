@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using EasyADO.NET;
@@ -26,7 +25,10 @@ namespace Tests.Integration_Tests.FindTests
                 .Select(p => new Person {Surname = p.Surname})
                 .ToList();
             var actualReader = _easyAdoNet.Find("Persons", new[] {"Surname"},
-                new[] {new Tuple<string, object>("Name", "Maksym")});
+                new Dictionary<string, object>
+                {
+                    {"Name", "Maksym"}
+                });
             var actualCollection = new List<Person>(expectedCollection.Count);
 
             while (actualReader.Read())

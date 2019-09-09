@@ -9,6 +9,9 @@ namespace EasyADO.NET
 {
     public partial class EasyAdoNet
     {
+        private readonly string       _connectionString;
+        private readonly List<string> _tableNames;
+
         /// <param name="connectionString">Connection string to the Microsoft SQL Server database.</param>
         /// <exception cref="ArgumentException">Throws, when given connection string is empty or incorrect.</exception>
         /// <exception cref="ArgumentNullException">Throws, when given connection string is null.</exception>
@@ -25,9 +28,6 @@ namespace EasyADO.NET
 
             InitializeDbTablesNames();
         }
-
-        private readonly string       _connectionString;
-        private readonly List<string> _tableNames;
 
         private bool CheckConnectionString()
         {
@@ -89,13 +89,13 @@ namespace EasyADO.NET
             }
         }
 
-        private static string BuildConditionsQuery(IEnumerable<Tuple<string, object>> conditions)
+        private static string BuildConditionsQuery(Dictionary<string, object> conditions)
         {
             var builder = new StringBuilder();
 
-            foreach (var (column, _) in conditions)
+            foreach (var pair in conditions)
             {
-                builder.Append($"[{column}] = @{column} AND ");
+                builder.Append($"[{pair.Key}] = @{pair.Key} AND ");
             }
 
             var resultString = builder.ToString();
@@ -103,12 +103,12 @@ namespace EasyADO.NET
             return resultString.Remove(resultString.LastIndexOf("AND", StringComparison.Ordinal));
         }
 
-        private void CheckConditions(Tuple<string, object>[] conditions)
+        private void CheckConditions(Dictionary<string, object> conditions)
         {
-            if (conditions == null || conditions.Any(i => i == null))
+            if (conditions == null || conditions.Any(i => i.Key == null || i.Value == null))
                 throw new ArgumentNullException(nameof(conditions));
 
-            if (conditions.Length == 0)
+            if (conditions.Count == 0)
                 throw new ArgumentException("Conditions can't be empty", nameof(conditions));
         }
     }

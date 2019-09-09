@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Text;
 
@@ -15,7 +16,7 @@ namespace EasyADO.NET
         /// <exception cref="ArgumentException">Throws, when given <paramref name="tableName"/> doesn't exist in the database or <paramref name="predicate"/> or <paramref name="updatingValues"/> are empty.</exception>
         /// <exception cref="ArgumentNullException">Throws, when one of the parameters is null.</exception>
         /// <exception cref="SqlException">Throws, when <paramref name="predicate"/> or <paramref name="updatingValues"/> have non-existing column.</exception>
-        public void Update(string tableName, string predicate, params Tuple<string, object>[] updatingValues)
+        public void Update(string tableName, string predicate, Dictionary<string, object> updatingValues)
         {
             CheckForTableExistent(tableName);
             CheckUpdatingValues(updatingValues);
@@ -28,9 +29,9 @@ namespace EasyADO.NET
             using (var command = new SqlCommand(BuildUpdateQuery(tableName, predicate, updatingValues),
                 connection))
             {
-                foreach (var (column, value) in updatingValues)
+                foreach (var pair in updatingValues)
                 {
-                    command.Parameters.AddWithValue($"@{column}", value);
+                    command.Parameters.AddWithValue($"@{pair.Key}", pair.Value);
                 }
 
                 command.ExecuteNonQuery();
@@ -47,8 +48,8 @@ namespace EasyADO.NET
         /// <exception cref="ArgumentException">Throws, when given <paramref name="tableName"/> doesn't exist in the database or <paramref name="equalityConditions"/> or <paramref name="updatingValues"/> are empty.</exception>
         /// <exception cref="ArgumentNullException">Throws, when one of the parameters is null.</exception>
         /// <exception cref="SqlException">Throws, when <paramref name="equalityConditions"/> or <paramref name="updatingValues"/> have non-existing column.</exception>
-        public void Update(string tableName, Tuple<string, object>[] equalityConditions,
-            params Tuple<string, object>[] updatingValues)
+        public void Update(string tableName, Dictionary<string, object> equalityConditions,
+            Dictionary<string, object> updatingValues)
         {
             CheckForTableExistent(tableName);
             CheckUpdatingValues(updatingValues);
@@ -59,21 +60,21 @@ namespace EasyADO.NET
             using (var command = new SqlCommand(BuildUpdateQuery(tableName, equalityConditions, updatingValues),
                 connection))
             {
-                foreach (var (column, value) in updatingValues)
+                foreach (var pair in updatingValues)
                 {
-                    command.Parameters.AddWithValue($"@{column}", value);
+                    command.Parameters.AddWithValue($"@{pair.Key}", pair.Value);
                 }
 
-                foreach (var (column, value) in equalityConditions)
+                foreach (var pair in equalityConditions)
                 {
-                    command.Parameters.AddWithValue($"@eq{column}", value);
+                    command.Parameters.AddWithValue($"@eq{pair.Key}", pair.Value);
                 }
 
                 command.ExecuteNonQuery();
             }
         }
 
-        private void CheckUpdatingValues(Tuple<string, object>[] updatingValues)
+        private void CheckUpdatingValues(Dictionary<string, object> updatingValues)
         {
             try
             {
@@ -90,13 +91,13 @@ namespace EasyADO.NET
         }
 
         private static string BuildUpdateQuery(string tableName, string predicate,
-            params Tuple<string, object>[] updatingValues)
+            Dictionary<string, object> updatingValues)
         {
             var builder = new StringBuilder($"UPDATE [{tableName}] SET ");
 
-            foreach (var (column, _) in updatingValues)
+            foreach (var pair in updatingValues)
             {
-                builder.Append($"[{column}] = @{column}, ");
+                builder.Append($"[{pair.Key}] = @{pair.Key}, ");
             }
 
             var res = builder.ToString().Substring(0, builder.Length - 2);
@@ -104,22 +105,22 @@ namespace EasyADO.NET
             return $"{res} {predicate}";
         }
 
-        private static string BuildUpdateQuery(string tableName, Tuple<string, object>[] equalityConditions,
-            Tuple<string, object>[] updatingValues)
+        private static string BuildUpdateQuery(string tableName, Dictionary<string, object> equalityConditions,
+            Dictionary<string, object> updatingValues)
         {
             var builder = new StringBuilder($"UPDATE [{tableName}] SET ");
 
-            foreach (var (column, _) in updatingValues)
+            foreach (var pair in updatingValues)
             {
-                builder.Append($"[{column}] = @{column}, ");
+                builder.Append($"[{pair.Key}] = @{pair.Key}, ");
             }
 
             var res = builder.ToString().Substring(0, builder.Length - 2);
             builder = new StringBuilder($"{res} WHERE ");
 
-            foreach (var (column, _) in equalityConditions)
+            foreach (var pair in equalityConditions)
             {
-                builder.Append($"[{column}] = @eq{column} AND ");
+                builder.Append($"[{pair.Key}] = @eq{pair.Key} AND ");
             }
 
             return builder.ToString().Substring(0, builder.Length - 5);

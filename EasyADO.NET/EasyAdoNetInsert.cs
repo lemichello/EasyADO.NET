@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Text;
 
@@ -16,7 +17,7 @@ namespace EasyADO.NET
         /// <exception cref="ArgumentException">Throws, when given <paramref name="tableName"/> doesn't exist in the database or <paramref name="values"/> are empty.</exception>
         /// <exception cref="ArgumentNullException">Throws, when one of the parameters is null.</exception>
         /// <exception cref="SqlException">Throws, when <paramref name="values"/> has not existing column.</exception>
-        public int Insert(string tableName, params Tuple<string, object>[] values)
+        public int Insert(string tableName, Dictionary<string, object> values)
         {
             CheckForTableExistent(tableName);
             CheckValues(values);
@@ -26,16 +27,16 @@ namespace EasyADO.NET
 
             using (var command = new SqlCommand(commandText, connection))
             {
-                foreach (var (column, value) in values)
+                foreach (var pair in values)
                 {
-                    command.Parameters.AddWithValue($"@{column}", value);
+                    command.Parameters.AddWithValue($"@{pair.Key}", pair.Value);
                 }
 
                 return (int) command.ExecuteScalar();
             }
         }
 
-        private void CheckValues(Tuple<string, object>[] values)
+        private void CheckValues(Dictionary<string, object> values)
         {
             try
             {
@@ -51,21 +52,21 @@ namespace EasyADO.NET
             }
         }
 
-        private static string BuildInsertQuery(string tableName, Tuple<string, object>[] values)
+        private static string BuildInsertQuery(string tableName, Dictionary<string, object> values)
         {
             var builder = new StringBuilder($"INSERT INTO [{tableName}] ( ");
 
-            foreach (var (column, _) in values)
+            foreach (var pair in values)
             {
-                builder.Append($"[{column}], ");
+                builder.Append($"[{pair.Key}], ");
             }
 
             var resultStr = builder.ToString().Substring(0, builder.Length - 2);
             builder = new StringBuilder(resultStr + ") OUTPUT inserted.Id VALUES (");
 
-            foreach (var (column, _) in values)
+            foreach (var pair in values)
             {
-                builder.Append($"@{column}, ");
+                builder.Append($"@{pair.Key}, ");
             }
 
             return builder.ToString().Substring(0, builder.Length - 2) + ")";

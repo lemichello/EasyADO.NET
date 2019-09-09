@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using EasyADO.NET;
 using NUnit.Framework;
 
@@ -20,18 +21,18 @@ namespace Tests.Unit_Tests.FindAllTests
             new object[]
             {
                 "Persons",
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("Name", "Maksym"),
-                    new Tuple<string, object>("Surname", "Lemich")
+                    {"Name", "Maksym"},
+                    {"Surname", "Lemich"}
                 }
             },
             new object[]
             {
                 "Roles",
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("Name", "Admin"),
+                    {"Name", "Admin"},
                 }
             }
         };
@@ -41,24 +42,24 @@ namespace Tests.Unit_Tests.FindAllTests
             new object[]
             {
                 "Incorrect",
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("Name", "Maksym"),
-                    new Tuple<string, object>("Surname", "Lemich")
+                    {"Name", "Maksym"},
+                    {"Surname", "Lemich"}
                 }
             },
             new object[]
             {
                 "NotExisting",
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("Name", "Admin")
+                    {"Name", "Admin"}
                 }
             },
             new object[]
             {
                 "NotExisting",
-                new Tuple<string, object>[] { }
+                new Dictionary<string, object>()
             }
         };
 
@@ -67,9 +68,9 @@ namespace Tests.Unit_Tests.FindAllTests
             new object[]
             {
                 "EmptyTable",
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("EmptyName", "Maksym"),
+                    {"EmptyName", "Maksym"},
                 }
             }
         };
@@ -79,21 +80,29 @@ namespace Tests.Unit_Tests.FindAllTests
             new object[]
             {
                 null,
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("EmptyName", "Maksym"),
+                    {"EmptyName", "Maksym"},
                 }
             },
             new object[]
             {
                 "EmptyTable",
                 null
+            },
+            new object[]
+            {
+                null,
+                new Dictionary<string, object>
+                {
+                    {"EmptyName", null}
+                }
             }
         };
 
         [Test, TestCaseSource(nameof(CorrectParameters))]
         public void When_FindAll_Has_Rows(string tableName,
-            params Tuple<string, object>[] conditions)
+            Dictionary<string, object> conditions)
         {
             var result = _easyAdoNet.FindAll(tableName, conditions);
 
@@ -102,7 +111,7 @@ namespace Tests.Unit_Tests.FindAllTests
 
         [Test, TestCaseSource(nameof(EmptyTableParameters))]
         public void When_FindAll_HasNot_Rows(string tableName,
-            params Tuple<string, object>[] conditions)
+            Dictionary<string, object> conditions)
         {
             var result = _easyAdoNet.FindAll(tableName, conditions);
 
@@ -111,14 +120,14 @@ namespace Tests.Unit_Tests.FindAllTests
 
         [Test, TestCaseSource(nameof(IncorrectParameters))]
         public void When_FindAll_Throws_ArgumentException(string tableName,
-            params Tuple<string, object>[] conditions)
+            Dictionary<string, object> conditions)
         {
             Assert.Throws<ArgumentException>(() => _easyAdoNet.FindAll(tableName, conditions));
         }
 
         [Test, TestCaseSource(nameof(NullParameters))]
         public void When_FindAll_Throws_ArgumentNullException(string tableName,
-            params Tuple<string, object>[] conditions)
+            Dictionary<string, object> conditions)
         {
             Assert.Throws<ArgumentNullException>(() => _easyAdoNet.FindAll(tableName, conditions));
         }

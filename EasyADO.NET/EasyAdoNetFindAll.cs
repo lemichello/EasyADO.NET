@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 
 namespace EasyADO.NET
@@ -37,7 +38,7 @@ namespace EasyADO.NET
         /// <exception cref="ArgumentException">Throws, when <paramref name="tableName"/> doesn't exist in the database.</exception>
         /// <exception cref="ArgumentNullException">Throws, when <paramref name="tableName"/> or <paramref name="equalityConditions"/> are null.</exception>
         /// <exception cref="SqlException">Throws, when <paramref name="equalityConditions"/> have non-existing column.</exception>
-        public SqlDataReader FindAll(string tableName, params Tuple<string, object>[] equalityConditions)
+        public SqlDataReader FindAll(string tableName, Dictionary<string, object> equalityConditions)
         {
             CheckConditions(equalityConditions);
             CheckForTableExistent(tableName);
@@ -48,9 +49,9 @@ namespace EasyADO.NET
                 $"SELECT * FROM [{tableName}] WHERE {BuildConditionsQuery(equalityConditions)}",
                 connection))
             {
-                foreach (var (column, value) in equalityConditions)
+                foreach (var pair in equalityConditions)
                 {
-                    command.Parameters.AddWithValue($"@{column}", value);
+                    command.Parameters.AddWithValue($"@{pair.Key}", pair.Value);
                 }
 
                 return command.ExecuteReader();

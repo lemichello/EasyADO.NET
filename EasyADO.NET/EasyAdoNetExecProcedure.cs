@@ -1,8 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
 
 namespace EasyADO.NET
 {
@@ -17,12 +17,12 @@ namespace EasyADO.NET
         /// <returns>A <see cref="SqlDataReader"/>.</returns>
         /// <exception cref="ArgumentNullException">Throws, when one of the parameters is null.</exception>
         /// <exception cref="SqlException">Throws, when <paramref name="procedureName"/> or one of the <paramref name="parameters"/> doesn't exist in the database.</exception>
-        public SqlDataReader ExecProcedure(string procedureName, params Tuple<string, object>[] parameters)
+        public SqlDataReader ExecProcedure(string procedureName, Dictionary<string, object> parameters)
         {
             if (procedureName == null)
                 throw new ArgumentNullException(nameof(procedureName));
 
-            if (parameters == null || parameters.Any(i => i == null))
+            if (parameters == null || parameters.Any(i => i.Key == null || i.Value == null))
                 throw new ArgumentNullException(nameof(parameters));
 
             var connection = GetAndOpenConnection();
@@ -32,9 +32,9 @@ namespace EasyADO.NET
             {
                 command.CommandType = CommandType.StoredProcedure;
 
-                foreach (var (name, value) in parameters)
+                foreach (var pair in parameters)
                 {
-                    command.Parameters.AddWithValue($"@{name}", value);
+                    command.Parameters.AddWithValue($"@{pair.Key}", pair.Value);
                 }
 
                 return command.ExecuteReader();

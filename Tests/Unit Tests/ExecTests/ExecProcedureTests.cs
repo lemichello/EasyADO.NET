@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using EasyADO.NET;
 using Microsoft.EntityFrameworkCore;
@@ -37,10 +38,10 @@ namespace Tests.Unit_Tests.ExecTests
             new object[]
             {
                 "PersonsNames",
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("Name", "Maksym"),
-                    new Tuple<string, object>("Surname", "Lemich")
+                    {"Name", "Maksym"},
+                    {"Surname", "Lemich"}
                 }
             }
         };
@@ -50,10 +51,10 @@ namespace Tests.Unit_Tests.ExecTests
             new object[]
             {
                 "InsertPerson",
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("Name", "NewName"),
-                    new Tuple<string, object>("Surname", "NewSurname")
+                    {"Name", "NewName"},
+                    {"Surname", "NewSurname"}
                 }
             }
         };
@@ -63,7 +64,7 @@ namespace Tests.Unit_Tests.ExecTests
             new object[]
             {
                 "EmptyProcedure",
-                new Tuple<string, object>[] { }
+                new Dictionary<string, object>()
             }
         };
 
@@ -72,10 +73,10 @@ namespace Tests.Unit_Tests.ExecTests
             new object[]
             {
                 null,
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("Name", "Maksym"),
-                    new Tuple<string, object>("Surname", "Lemich")
+                    {"Name", "Maksym"},
+                    {"Surname", "Lemich"}
                 }
             },
             new object[]
@@ -86,10 +87,10 @@ namespace Tests.Unit_Tests.ExecTests
             new object[]
             {
                 "PersonsNames",
-                new[]
+                new Dictionary<string, object>
                 {
-                    null,
-                    new Tuple<string, object>("Surname", "Lemich")
+                    {"Name", "Maksym"},
+                    {"Surname", null}
                 }
             }
         };
@@ -99,25 +100,25 @@ namespace Tests.Unit_Tests.ExecTests
             new object[]
             {
                 "NotExists",
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("Name", "Maksym"),
-                    new Tuple<string, object>("Surname", "Lemich")
+                    {"Name", "Maksym"},
+                    {"Surname", "Lemich"}
                 }
             },
             new object[]
             {
                 "PersonsNames",
-                new[]
+                new Dictionary<string, object>
                 {
-                    new Tuple<string, object>("NotExists", "Maksym"),
-                    new Tuple<string, object>("Surname", "Lemich")
+                    {"NotExists", "Maksym"},
+                    {"Surname", "Lemich"}
                 }
             }
         };
 
         [Test, TestCaseSource(nameof(CorrectParametersForSelect))]
-        public void When_ExecProcedure_Has_Rows(string procedureName, params Tuple<string, object>[] parameters)
+        public void When_ExecProcedure_Has_Rows(string procedureName, Dictionary<string, object> parameters)
         {
             var result = _easyAdoNet.ExecProcedure(procedureName, parameters);
 
@@ -125,7 +126,7 @@ namespace Tests.Unit_Tests.ExecTests
         }
 
         [Test, TestCaseSource(nameof(ParametersForEmptySelect))]
-        public void When_ExecProcedure_HasNot_Rows(string procedureName, params Tuple<string, object>[] parameters)
+        public void When_ExecProcedure_HasNot_Rows(string procedureName, Dictionary<string, object> parameters)
         {
             var result = _easyAdoNet.ExecProcedure(procedureName, parameters);
 
@@ -133,21 +134,21 @@ namespace Tests.Unit_Tests.ExecTests
         }
 
         [Test, TestCaseSource(nameof(CorrectParametersForInsert))]
-        public void When_ExecProcedure_Inserts_Values(string procedureName, params Tuple<string, object>[] parameters)
+        public void When_ExecProcedure_Inserts_Values(string procedureName, Dictionary<string, object> parameters)
         {
             Assert.DoesNotThrow(() => _easyAdoNet.ExecProcedure(procedureName, parameters));
         }
 
         [Test, TestCaseSource(nameof(NullParameters))]
         public void When_ExecProcedure_Throws_ArgumentNullException(string procedureName,
-            params Tuple<string, object>[] parameters)
+            Dictionary<string, object> parameters)
         {
             Assert.Throws<ArgumentNullException>(() => _easyAdoNet.ExecProcedure(procedureName, parameters));
         }
 
         [Test, TestCaseSource(nameof(IncorrectSqlParameters))]
         public void When_ExecProcedure_Throws_SqlException(string procedureName,
-            params Tuple<string, object>[] parameters)
+            Dictionary<string, object> parameters)
         {
             Assert.Throws<SqlException>(() => _easyAdoNet.ExecProcedure(procedureName, parameters));
         }

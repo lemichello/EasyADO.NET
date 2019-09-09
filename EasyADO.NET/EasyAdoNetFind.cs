@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 
@@ -65,7 +66,7 @@ namespace EasyADO.NET
         /// <exception cref="ArgumentException">Throws, when given <paramref name="tableName"/> doesn't exist in the database or <paramref name="equalityConditions"/> or <paramref name="columns"/>  are empty.</exception>
         /// <exception cref="ArgumentNullException">Throws, when one of the parameters is null.</exception>
         /// <exception cref="SqlException">Throws, when <paramref name="columns"/> or <paramref name="equalityConditions"/> have non-existing column.</exception>
-        public SqlDataReader Find(string tableName, string[] columns, Tuple<string, object>[] equalityConditions)
+        public SqlDataReader Find(string tableName, string[] columns, Dictionary<string, object> equalityConditions)
         {
             CheckColumns(columns);
             CheckForTableExistent(tableName);
@@ -77,9 +78,9 @@ namespace EasyADO.NET
 
             using (var command = new SqlCommand(commandText, connection))
             {
-                foreach (var (column, value) in equalityConditions)
+                foreach (var pair in equalityConditions)
                 {
-                    command.Parameters.AddWithValue($"@{column}", value);
+                    command.Parameters.AddWithValue($"@{pair.Key}", pair.Value);
                 }
 
                 return command.ExecuteReader();
