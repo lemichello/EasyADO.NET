@@ -1,3 +1,11 @@
+# Install
+To install EasyADO.NET you need to use NuGet:
+* Install via NuGet with Visual Studio or Rider: type 'EasyADO.NET' in the search field and click on install button
+* Install via Package Manager: `Install-Package EasyADO.NET -Version 1.0.0`
+* Install via .NET CLI: `dotnet add package EasyADO.NET --version 1.0.0`
+* Install via PackageReference: `<PackageReference Include="EasyADO.NET" Version="1.0.0" />`
+* Install via Paket CLI: `paket add EasyADO.NET --version 1.0.0`
+
 # Documentation
 ## Creating instance:
 You can create an EasyAdoNet instance passing only your connection string to the constructor:
