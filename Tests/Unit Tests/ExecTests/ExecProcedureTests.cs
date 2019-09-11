@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
 using EasyADO.NET;
 using Microsoft.EntityFrameworkCore;
@@ -20,137 +19,41 @@ namespace Tests.Unit_Tests.ExecTests
         public void OneTimeInit()
         {
             Context.Database.ExecuteSqlCommand(
-                "CREATE PROCEDURE [PersonsNames] @Name nvarchar(MAX), @Surname nvarchar(MAX) " +
-                "AS SELECT Name, Surname FROM Persons WHERE Name = @Name AND Surname = @Surname;");
-
-            Context.Database.ExecuteSqlCommand(
-                "CREATE PROCEDURE [InsertPerson] @Name nvarchar(MAX), @Surname nvarchar(MAX) " +
-                "AS INSERT INTO Persons(Name, Surname) VALUES (@Name, @Surname);");
+                "CREATE PROCEDURE [PersonsNames] " +
+                "AS SELECT Name, Surname FROM Persons;");
 
             Context.Database.ExecuteSqlCommand(
                 "CREATE PROCEDURE [EmptyProcedure] AS SELECT EmptyName FROM EmptyTable;");
         }
 
-        private EasyAdoNet _easyAdoNet;
-
-        private static readonly object[] CorrectParametersForSelect =
+        [TestCase("PersonsNames")]
+        public void When_ExecProcedure_Has_Rows(string procedureName)
         {
-            new object[]
-            {
-                "PersonsNames",
-                new Dictionary<string, object>
-                {
-                    {"Name", "Maksym"},
-                    {"Surname", "Lemich"}
-                }
-            }
-        };
-
-        private static readonly object[] CorrectParametersForInsert =
-        {
-            new object[]
-            {
-                "InsertPerson",
-                new Dictionary<string, object>
-                {
-                    {"Name", "NewName"},
-                    {"Surname", "NewSurname"}
-                }
-            }
-        };
-
-        private static readonly object[] ParametersForEmptySelect =
-        {
-            new object[]
-            {
-                "EmptyProcedure",
-                new Dictionary<string, object>()
-            }
-        };
-
-        private static readonly object[] NullParameters =
-        {
-            new object[]
-            {
-                null,
-                new Dictionary<string, object>
-                {
-                    {"Name", "Maksym"},
-                    {"Surname", "Lemich"}
-                }
-            },
-            new object[]
-            {
-                "PersonsNames",
-                null
-            },
-            new object[]
-            {
-                "PersonsNames",
-                new Dictionary<string, object>
-                {
-                    {"Name", "Maksym"},
-                    {"Surname", null}
-                }
-            }
-        };
-
-        private static readonly object[] IncorrectSqlParameters =
-        {
-            new object[]
-            {
-                "NotExists",
-                new Dictionary<string, object>
-                {
-                    {"Name", "Maksym"},
-                    {"Surname", "Lemich"}
-                }
-            },
-            new object[]
-            {
-                "PersonsNames",
-                new Dictionary<string, object>
-                {
-                    {"NotExists", "Maksym"},
-                    {"Surname", "Lemich"}
-                }
-            }
-        };
-
-        [Test, TestCaseSource(nameof(CorrectParametersForSelect))]
-        public void When_ExecProcedure_Has_Rows(string procedureName, Dictionary<string, object> parameters)
-        {
-            var result = _easyAdoNet.ExecProcedure(procedureName, parameters);
+            var result = _easyAdoNet.ExecProcedure(procedureName);
 
             Assert.IsTrue(result.HasRows);
         }
 
-        [Test, TestCaseSource(nameof(ParametersForEmptySelect))]
-        public void When_ExecProcedure_HasNot_Rows(string procedureName, Dictionary<string, object> parameters)
+        [TestCase("EmptyProcedure")]
+        public void When_ExecProcedure_HasNot_Rows(string procedureName)
         {
-            var result = _easyAdoNet.ExecProcedure(procedureName, parameters);
+            var result = _easyAdoNet.ExecProcedure(procedureName);
 
             Assert.IsFalse(result.HasRows);
         }
 
-        [Test, TestCaseSource(nameof(CorrectParametersForInsert))]
-        public void When_ExecProcedure_Inserts_Values(string procedureName, Dictionary<string, object> parameters)
+        [TestCase(null)]
+        public void When_ExecProcedure_Throws_ArgumentNullException(string procedureName)
         {
-            Assert.DoesNotThrow(() => _easyAdoNet.ExecProcedure(procedureName, parameters));
+            Assert.Throws<ArgumentNullException>(() => _easyAdoNet.ExecProcedure(procedureName));
         }
 
-        [Test, TestCaseSource(nameof(NullParameters))]
-        public void When_ExecProcedure_Throws_ArgumentNullException(string procedureName,
-            Dictionary<string, object> parameters)
+        [TestCase("NotExisting")]
+        public void When_ExecProcedure_Throws_SqlException(string procedureName)
         {
-            Assert.Throws<ArgumentNullException>(() => _easyAdoNet.ExecProcedure(procedureName, parameters));
+            Assert.Throws<SqlException>(() => _easyAdoNet.ExecProcedure(procedureName));
         }
 
-        [Test, TestCaseSource(nameof(IncorrectSqlParameters))]
-        public void When_ExecProcedure_Throws_SqlException(string procedureName,
-            Dictionary<string, object> parameters)
-        {
-            Assert.Throws<SqlException>(() => _easyAdoNet.ExecProcedure(procedureName, parameters));
-        }
+        private EasyAdoNet _easyAdoNet;
     }
 }
