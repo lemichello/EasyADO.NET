@@ -79,7 +79,7 @@ easyAdoNet.Update("Table name", "WHERE Name = 'Maksym'", new Dictionary<string, 
 var result = easyAdoNet.ExecView("View name");
 ```
 
-## 'ExecProcedure` method:
+## `ExecProcedure` method:
 `ExecProcedure` executes given stored procedure name with optional parameters:
 1. With optional parameters:
 ```C#
