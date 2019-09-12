@@ -94,6 +94,34 @@
                 have non-existing column.
             </exception>
         </member>
+        <member name="M:EasyADO.NET.EasyAdoNet.Find``1(System.String,System.String[])">
+            <summary>
+                Retrieves all the data from a given table, selecting only given columns.
+            </summary>
+            <param name="tableName">Name of the table, from which will be retrieving the data.</param>
+            <param name="columns">Names of the columns.</param>
+            <typeparam name="T">Type of the class, to which will be converted result of query.</typeparam>
+            <returns>Collection of
+                <typeparamref name="T"/>
+                instances.
+            </returns>
+            <exception cref="T:System.ArgumentException">Throws, when given
+                <paramref name="tableName"/>
+                doesn't exist in the database or
+                <paramref name="columns"/>
+                are empty.
+            </exception>
+            <exception cref="T:System.ArgumentNullException">Throws, when
+                <paramref name="tableName"/>
+                or
+                <paramref name="columns"/>
+                are null.
+            </exception>
+            <exception cref="T:System.Data.SqlClient.SqlException">Throws, when
+                <paramref name="columns"/>
+                have non-existing column.
+            </exception>
+        </member>
         <member name="M:EasyADO.NET.EasyAdoNet.Find(System.String,System.String,System.String[])">
             <summary>
                 Retrieves all the data from a given table by predicate, selecting only given columns.
@@ -104,6 +132,36 @@
             </param>
             <param name="columns">Names of the columns.</param>
             <returns>A<see cref="T:System.Data.SqlClient.SqlDataReader"/>.
+            </returns>
+            <exception cref="T:System.ArgumentException">Throws, when given
+                <paramref name="tableName"/>
+                doesn't exist in the database or
+                <paramref name="predicate"/>
+                or
+                <paramref name="columns"/>
+                are empty.
+            </exception>
+            <exception cref="T:System.ArgumentNullException">Throws, when one of the parameters is null.</exception>
+            <exception cref="T:System.Data.SqlClient.SqlException">Throws, when
+                <paramref name="columns"/>
+                have non-existing column or
+                <paramref name="predicate"/>
+                has incorrect SQL syntax.
+            </exception>
+        </member>
+        <member name="M:EasyADO.NET.EasyAdoNet.Find``1(System.String,System.String,System.String[])">
+            <summary>
+                Retrieves all the data from a given table by predicate, selecting only given columns.
+            </summary>
+            <param name="tableName">Name of the table, from which will be retrieving the data.</param>
+            <param name="predicate">Part of SQL query, which starts with 'WHERE' statement, e.g. 'WHERE ColumnName =
+                Value AND AnotherColumnName = AnotherValue'.
+            </param>
+            <param name="columns">Names of the columns.</param>
+            <typeparam name="T">Type of the class, to which will be converted result of query.</typeparam>
+            <returns>Collection of
+                <typeparamref name="T"/>
+                instances.
             </returns>
             <exception cref="T:System.ArgumentException">Throws, when given
                 <paramref name="tableName"/>
@@ -149,6 +207,37 @@
                 have non-existing column.
             </exception>
         </member>
+        <member name="M:EasyADO.NET.EasyAdoNet.Find``1(System.String,System.String[],System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+                Retrieves all the data from a given table by conditions, selecting only given columns.
+            </summary>
+            <param name="tableName">Name of the table, from which will be retrieving the data.</param>
+            <param name="columns">Names of the columns.</param>
+            <param name="equalityConditions">Conditions, by which will be searching. First component - name of the
+                column,
+                second element - value of the column.
+            </param>
+            <typeparam name="T">Type of the class, to which will be converted result of query.</typeparam>
+            <returns>Collection of
+                <typeparamref name="T"/>
+                instances.
+            </returns>
+            <exception cref="T:System.ArgumentException">Throws, when given
+                <paramref name="tableName"/>
+                doesn't exist in the database or
+                <paramref name="equalityConditions"/>
+                or
+                <paramref name="columns"/>
+                are empty.
+            </exception>
+            <exception cref="T:System.ArgumentNullException">Throws, when one of the parameters is null.</exception>
+            <exception cref="T:System.Data.SqlClient.SqlException">Throws, when
+                <paramref name="columns"/>
+                or
+                <paramref name="equalityConditions"/>
+                have non-existing column.
+            </exception>
+        </member>
         <member name="M:EasyADO.NET.EasyAdoNet.FindAll(System.String)">
             <summary>
                 Retrieves all the data from a given table name.
@@ -171,7 +260,9 @@
             </summary>
             <param name="tableName">Name of the table, from which will be retrieving the data.</param>
             <typeparam name="T">Type of the class, to which will be converted result of query.</typeparam>
-            <returns>Collection of instances of<typeparamref name="T"/>.
+            <returns>Collection of
+                <typeparamref name="T"/>
+                instances.
             </returns>
             <exception cref="T:System.ArgumentException">Throws, when
                 <paramref name="tableName"/>
@@ -218,7 +309,9 @@
                 second component - searching value of the column.
             </param>
             <typeparam name="T">Type of the class, to which will be converted result of query.</typeparam>
-            <returns>Collection of instances of<typeparamref name="T"/>.
+            <returns>Collection of
+                <typeparamref name="T"/>
+                instances.
             </returns>
             <exception cref="T:System.ArgumentException">Throws, when
                 <paramref name="tableName"/>
@@ -271,7 +364,9 @@
                 Value AND AnotherColumnName = AnotherValue'.
             </param>
             <typeparam name="T">Type of the class, to which will be converted result of query.</typeparam>
-            <returns>Collection of instances of<typeparamref name="T"/>.
+            <returns>Collection of
+                <typeparamref name="T"/>
+                instances.
             </returns>
             <exception cref="T:System.ArgumentException">Throws, when
                 <paramref name="tableName"/>
@@ -292,7 +387,7 @@
         </member>
         <member name="M:EasyADO.NET.EasyAdoNet.Insert(System.String,System.Collections.Generic.Dictionary{System.String,System.Object})">
             <summary>
-                Inserts given values to the given table.
+                Inserts given values to the given table. 
             </summary>
             <param name="tableName">Name of the table, in which will be inserting the data.</param>
             <param name="values">Values, which will be inserting to the table. First component of the values - name of

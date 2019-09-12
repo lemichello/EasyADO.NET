@@ -18,6 +18,15 @@ namespace Tests.Integration_Tests.FindTests
         private EasyAdoNet _easyAdoNet;
 
         [Test]
+        public void When_FindByColumnGenericResult_EqualsTo_ExpectedResult()
+        {
+            var expectedCollection = Context.Persons.Select(p => new Person {Surname = p.Surname}).ToList();
+            var actualCollection   = _easyAdoNet.Find<Person>("Persons", new[] {"Surname"});
+
+            Assert.AreEqual(expectedCollection, actualCollection);
+        }
+
+        [Test]
         public void When_FindByColumnsResult_EqualsTo_ExpectedResult()
         {
             var expectedCollection = Context.Persons.Select(p => new Person {Surname = p.Surname}).ToList();

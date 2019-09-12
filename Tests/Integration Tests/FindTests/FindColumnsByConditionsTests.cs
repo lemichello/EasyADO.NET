@@ -18,6 +18,22 @@ namespace Tests.Integration_Tests.FindTests
         private EasyAdoNet _easyAdoNet;
 
         [Test]
+        public void When_FindByConditionsGenericResult_EqualsTo_ExpectedResult()
+        {
+            var expectedCollection = Context.Persons
+                .Where(p => p.Name == "Maksym")
+                .Select(p => new Person {Surname = p.Surname})
+                .ToList();
+            var actualCollection = _easyAdoNet.Find<Person>("Persons", new[] {"Surname"},
+                new Dictionary<string, object>
+                {
+                    {"Name", "Maksym"}
+                });
+
+            Assert.AreEqual(expectedCollection, actualCollection);
+        }
+
+        [Test]
         public void When_FindByConditionsResult_EqualsTo_ExpectedResult()
         {
             var expectedCollection = Context.Persons

@@ -31,7 +31,7 @@ namespace EasyADO.NET
         /// </summary>
         /// <param name="tableName">Name of the table, from which will be retrieving the data.</param>
         /// <typeparam name="T">Type of the class, to which will be converted result of query.</typeparam>
-        /// <returns>Collection of instances of <typeparamref name="T"/>.</returns>
+        /// <returns>Collection of <typeparamref name="T"/> instances.</returns>
         /// <exception cref="ArgumentException">Throws, when <paramref name="tableName"/> doesn't exist in the database.</exception>
         /// <exception cref="ArgumentNullException">Throws, when <paramref name="tableName"/> is null.</exception>
         public IEnumerable<T> FindAll<T>(string tableName) where T : class, new()
@@ -80,7 +80,7 @@ namespace EasyADO.NET
         /// second component - searching value of the column.
         /// </param>
         /// <typeparam name="T">Type of the class, to which will be converted result of query.</typeparam>
-        /// <returns>Collection of instances of <typeparamref name="T"/>.</returns>
+        /// <returns>Collection of <typeparamref name="T"/> instances.</returns>
         /// <exception cref="ArgumentException">Throws, when <paramref name="tableName"/> doesn't exist in the database.</exception>
         /// <exception cref="ArgumentNullException">Throws, when <paramref name="tableName"/> or <paramref name="equalityConditions"/> are null.</exception>
         /// <exception cref="SqlException">Throws, when <paramref name="equalityConditions"/> have non-existing column.</exception>
@@ -121,7 +121,7 @@ namespace EasyADO.NET
         /// <param name="tableName">Name of the table, from which will be retrieving the data.</param>
         /// <param name="predicate">Part of SQL query, which starts with 'WHERE' statement, e.g. 'WHERE ColumnName = Value AND AnotherColumnName = AnotherValue'.</param>
         /// <typeparam name="T">Type of the class, to which will be converted result of query.</typeparam>
-        /// <returns>Collection of instances of <typeparamref name="T"/>.</returns>
+        /// <returns>Collection of <typeparamref name="T"/> instances.</returns>
         /// <exception cref="ArgumentException">Throws, when <paramref name="tableName"/> doesn't exist in the database or <paramref name="predicate"/> is empty.</exception>
         /// <exception cref="ArgumentNullException">Throws, when <paramref name="tableName"/> or <paramref name="predicate"/> is null. </exception>
         /// <exception cref="SqlException">Throws, when <paramref name="predicate"/> has incorrect SQL syntax.</exception>
