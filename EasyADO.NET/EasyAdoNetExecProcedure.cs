@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using EasyADO.NET.Utils;
 
 namespace EasyADO.NET
 {
@@ -39,6 +40,25 @@ namespace EasyADO.NET
         }
 
         /// <summary>
+        /// Executes given stored procedure with given parameters.
+        /// </summary>
+        /// <param name="procedureName">Name of the stored procedure.</param>
+        /// <param name="parameters">Parameters for stored procedure. First element - name of the parameter,
+        /// second element - value.</param>
+        /// <typeparam name="T">Type of the class, to which will be converted result of query.</typeparam>
+        /// <returns>Collection of <typeparamref name="T"/> instances.</returns>
+        /// <exception cref="ArgumentException">Throws, when <paramref name="parameters"/> is empty.</exception>
+        /// <exception cref="ArgumentNullException">Throws, when one of the parameters is null.</exception>
+        /// <exception cref="SqlException">Throws, when <paramref name="procedureName"/> or one of the <paramref name="parameters"/> doesn't exist in the database.</exception>
+        public IEnumerable<T> ExecProcedure<T>(string procedureName, Dictionary<string, object> parameters)
+            where T : class, new()
+        {
+            var reader = ExecProcedure(procedureName, parameters);
+
+            return reader.ConvertToClass<T>();
+        }
+
+        /// <summary>
         /// Executes given stored procedure.
         /// </summary>
         /// <param name="procedureName">Name of the stored procedure.</param>
@@ -58,6 +78,21 @@ namespace EasyADO.NET
 
                 return command.ExecuteReader();
             }
+        }
+
+        /// <summary>
+        /// Executes given stored procedure.
+        /// </summary>
+        /// <param name="procedureName">Name of the stored procedure.</param>
+        /// <typeparam name="T">Type of the class, to which will be converted result of query.</typeparam>
+        /// <returns>Collection of <typeparamref name="T"/> instances.</returns>
+        /// <exception cref="ArgumentNullException">Throws, when <paramref name="procedureName"/> is null.</exception>
+        /// <exception cref="SqlException">Throws, when <paramref name="procedureName"/> doesn't exist in the database.</exception>
+        public IEnumerable<T> ExecProcedure<T>(string procedureName) where T : class, new()
+        {
+            var reader = ExecProcedure(procedureName);
+
+            return reader.ConvertToClass<T>();
         }
 
         private void CheckExecProcedureParameters(string procedureName, Dictionary<string, object> parameters)

@@ -31,6 +31,19 @@ namespace Tests.Integration_Tests.ExecTests
         private EasyAdoNet _easyAdoNet;
 
         [Test]
+        public void When_ExecProcedureGenericSelectResult_EqualsTo_ExpectedResult()
+        {
+            var expectedCollection = Context.Persons.FromSql("PersonsNames 'Maksym', 'Lemich'").ToList();
+            var actualCollection = _easyAdoNet.ExecProcedure<Person>("PersonsNames", new Dictionary<string, object>
+            {
+                {"Name", "Maksym"},
+                {"Surname", "Lemich"}
+            });
+
+            Assert.AreEqual(expectedCollection, actualCollection);
+        }
+
+        [Test]
         public void When_ExecProcedureInsertResult_EqualsTo_ExpectedResult()
         {
             _easyAdoNet.ExecProcedure("InsertPerson", new Dictionary<string, object>

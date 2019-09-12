@@ -37,6 +37,31 @@
                 doesn't exist in the database.
             </exception>
         </member>
+        <member name="M:EasyADO.NET.EasyAdoNet.ExecProcedure``1(System.String,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+                Executes given stored procedure with given parameters.
+            </summary>
+            <param name="procedureName">Name of the stored procedure.</param>
+            <param name="parameters">Parameters for stored procedure. First element - name of the parameter,
+                second element - value.
+            </param>
+            <typeparam name="T">Type of the class, to which will be converted result of query.</typeparam>
+            <returns>Collection of
+                <typeparamref name="T"/>
+                instances.
+            </returns>
+            <exception cref="T:System.ArgumentException">Throws, when
+                <paramref name="parameters"/>
+                is empty.
+            </exception>
+            <exception cref="T:System.ArgumentNullException">Throws, when one of the parameters is null.</exception>
+            <exception cref="T:System.Data.SqlClient.SqlException">Throws, when
+                <paramref name="procedureName"/>
+                or one of the
+                <paramref name="parameters"/>
+                doesn't exist in the database.
+            </exception>
+        </member>
         <member name="M:EasyADO.NET.EasyAdoNet.ExecProcedure(System.String)">
             <summary>
                 Executes given stored procedure.
@@ -53,12 +78,50 @@
                 doesn't exist in the database.
             </exception>
         </member>
+        <member name="M:EasyADO.NET.EasyAdoNet.ExecProcedure``1(System.String)">
+            <summary>
+                Executes given stored procedure.
+            </summary>
+            <param name="procedureName">Name of the stored procedure.</param>
+            <typeparam name="T">Type of the class, to which will be converted result of query.</typeparam>
+            <returns>Collection of
+                <typeparamref name="T"/>
+                instances.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">Throws, when
+                <paramref name="procedureName"/>
+                is null.
+            </exception>
+            <exception cref="T:System.Data.SqlClient.SqlException">Throws, when
+                <paramref name="procedureName"/>
+                doesn't exist in the database.
+            </exception>
+        </member>
         <member name="M:EasyADO.NET.EasyAdoNet.ExecView(System.String)">
             <summary>
                 Executes given view and returns all the data from the result.
             </summary>
             <param name="viewName">Name of the view.</param>
             <returns>A<see cref="T:System.Data.SqlClient.SqlDataReader"/>.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">Throws, when
+                <paramref name="viewName"/>
+                is null.
+            </exception>
+            <exception cref="T:System.Data.SqlClient.SqlException">Throws, when
+                <paramref name="viewName"/>
+                doesn't exist in the database.'
+            </exception>
+        </member>
+        <member name="M:EasyADO.NET.EasyAdoNet.ExecView``1(System.String)">
+            <summary>
+                Executes given view and returns all the data from the result.
+            </summary>
+            <param name="viewName">Name of the view.</param>
+            <typeparam name="T">Type of the class, to which will be converted result of query.</typeparam>
+            <returns>Collection of
+                <typeparamref name="T"/>
+                instances.
             </returns>
             <exception cref="T:System.ArgumentNullException">Throws, when
                 <paramref name="viewName"/>

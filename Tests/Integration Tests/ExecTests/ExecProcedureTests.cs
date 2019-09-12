@@ -31,6 +31,23 @@ namespace Tests.Integration_Tests.ExecTests
         private EasyAdoNet _easyAdoNet;
 
         [Test]
+        public void When_ExecProcedureGenericSelectResult_EqualsTo_EmptyResult()
+        {
+            var actualCollection = _easyAdoNet.ExecProcedure<EmptyTable>("EmptyProcedure");
+
+            Assert.IsEmpty(actualCollection);
+        }
+
+        [Test]
+        public void When_ExecProcedureGenericSelectResult_EqualsTo_ExpectedResult()
+        {
+            var expectedCollection = Context.Persons.ToList();
+            var actualCollection   = _easyAdoNet.ExecProcedure<Person>("PersonsNames");
+
+            Assert.AreEqual(expectedCollection, actualCollection);
+        }
+
+        [Test]
         public void When_ExecProcedureSelectResult_EqualsTo_EmptyResult()
         {
             var actualReader     = _easyAdoNet.ExecProcedure("EmptyProcedure");
