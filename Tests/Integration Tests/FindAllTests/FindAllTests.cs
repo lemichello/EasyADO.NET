@@ -20,6 +20,15 @@ namespace Tests.Integration_Tests.FindAllTests
         private EasyAdoNet _easyAdoNet;
 
         [Test]
+        public void When_FindAllGenericResult_EqualsTo_ExpectedResult()
+        {
+            var expectedCollection = Context.Persons.AsNoTracking().ToList();
+            var actualCollection   = _easyAdoNet.FindAll<Person>("Persons");
+
+            Assert.AreEqual(expectedCollection, actualCollection);
+        }
+
+        [Test]
         public void When_FindAllResult_EqualsTo_ExpectedResult()
         {
             var expectedCollection = Context.Persons.AsNoTracking().ToList();

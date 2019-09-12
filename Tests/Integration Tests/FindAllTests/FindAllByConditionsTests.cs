@@ -19,6 +19,18 @@ namespace Tests.Integration_Tests.FindAllTests
         private EasyAdoNet _easyAdoNet;
 
         [Test]
+        public void When_FindAllGenericResult_EqualsTo_ExpectedResult()
+        {
+            var expectedCollection = Context.Persons.Where(p => p.Name == "Maksym").ToList();
+            var actualCollection = _easyAdoNet.FindAll<Person>("Persons", new Dictionary<string, object>
+            {
+                {"Name", "Maksym"}
+            });
+
+            Assert.AreEqual(expectedCollection, actualCollection);
+        }
+
+        [Test]
         public void When_FindAllResult_EqualsTo_ExpectedResult()
         {
             var expectedCollection = Context.Persons.Where(p => p.Name == "Maksym").ToList();

@@ -7,6 +7,9 @@ using System.Text.RegularExpressions;
 
 namespace EasyADO.NET
 {
+    /// <summary>
+    /// Library, which will make work with ADO.NET and Microsoft SQL Server much easier.
+    /// </summary>
     public partial class EasyAdoNet
     {
         private readonly string       _connectionString;
@@ -49,11 +52,24 @@ namespace EasyADO.NET
         private void InitializeDbTablesNames()
         {
             var dbName = Regex.Match(_connectionString, @"^.*;[Ii]nitial [Cc]atalog=([\w\d]+);.*$").Groups[1].Value;
-            var reader = GetTableNamesReader(dbName);
 
-            while (reader.Read())
+            using (var connection = new SqlConnection(_connectionString))
             {
-                _tableNames.Add(reader[0].ToString());
+                connection.Open();
+
+                using (var command = new SqlCommand(@"SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES
+                                                          WHERE TABLE_TYPE = 'BASE TABLE' AND 
+                                                                TABLE_CATALOG = @dbName", connection))
+                {
+                    command.Parameters.AddWithValue("@dbName", dbName);
+
+                    var reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        _tableNames.Add(reader[0].ToString());
+                    }
+                }
             }
         }
 
@@ -73,20 +89,6 @@ namespace EasyADO.NET
             connection.Open();
 
             return connection;
-        }
-
-        private SqlDataReader GetTableNamesReader(string dbName)
-        {
-            var connection = GetAndOpenConnection();
-
-            using (var command = new SqlCommand(@"SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES
-                                                          WHERE TABLE_TYPE = 'BASE TABLE' AND 
-                                                                TABLE_CATALOG = @dbName", connection))
-            {
-                command.Parameters.AddWithValue("@dbName", dbName);
-
-                return command.ExecuteReader();
-            }
         }
 
         private static string BuildConditionsQuery(Dictionary<string, object> conditions)

@@ -2,6 +2,22 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <SignAssembly>false</SignAssembly>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Title>EasyADO.NET</Title>
+    <Description>Library, which will make work with ADO.NET and Microsoft SQL Server much easier.</Description>
+    <RepositoryUrl>https://github.com/lemichello/EasyADO.NET</RepositoryUrl>
+    <AssemblyVersion>1.0.1.0</AssemblyVersion>
+    <FileVersion>1.0.1.0</FileVersion>
+    <PackageReleaseNotes/>
+    <Authors>Maksym Lemich</Authors>
+    <Product/>
+    <Company/>
+
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>D:\Maksym\C#\EasyADO.NET\EasyADO.NET\EasyADO.NET.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

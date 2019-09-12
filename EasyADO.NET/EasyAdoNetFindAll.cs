@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using EasyADO.NET.Utils;
 
 namespace EasyADO.NET
 {
@@ -21,10 +22,23 @@ namespace EasyADO.NET
 
             using (var command = new SqlCommand($"SELECT * FROM [{tableName}]", connection))
             {
-                command.Parameters.AddWithValue("@tableName", tableName);
-
                 return command.ExecuteReader();
             }
+        }
+
+        /// <summary>
+        /// Retrieves all the data from a given table name.
+        /// </summary>
+        /// <param name="tableName">Name of the table, from which will be retrieving the data.</param>
+        /// <typeparam name="T">Type of the class, to which will be converted result of query.</typeparam>
+        /// <returns>Collection of instances of <typeparamref name="T"/>.</returns>
+        /// <exception cref="ArgumentException">Throws, when <paramref name="tableName"/> doesn't exist in the database.</exception>
+        /// <exception cref="ArgumentNullException">Throws, when <paramref name="tableName"/> is null.</exception>
+        public IEnumerable<T> FindAll<T>(string tableName) where T : class, new()
+        {
+            var reader = FindAll(tableName);
+
+            return reader.ConvertToClass<T>();
         }
 
         /// <summary>
@@ -59,6 +73,26 @@ namespace EasyADO.NET
         }
 
         /// <summary>
+        /// Retrieves all the data from a given table name by conditions.
+        /// </summary>
+        /// <param name="tableName">Name of the table, from which will be retrieving the data.</param>
+        /// <param name="equalityConditions">Conditions, by which will be searching. First component - name of the column,
+        /// second component - searching value of the column.
+        /// </param>
+        /// <typeparam name="T">Type of the class, to which will be converted result of query.</typeparam>
+        /// <returns>Collection of instances of <typeparamref name="T"/>.</returns>
+        /// <exception cref="ArgumentException">Throws, when <paramref name="tableName"/> doesn't exist in the database.</exception>
+        /// <exception cref="ArgumentNullException">Throws, when <paramref name="tableName"/> or <paramref name="equalityConditions"/> are null.</exception>
+        /// <exception cref="SqlException">Throws, when <paramref name="equalityConditions"/> have non-existing column.</exception>
+        public IEnumerable<T> FindAll<T>(string tableName,
+            Dictionary<string, object> equalityConditions) where T : class, new()
+        {
+            var reader = FindAll(tableName, equalityConditions);
+
+            return reader.ConvertToClass<T>();
+        }
+
+        /// <summary>
         /// Retrieves all the data from a given table name by predicate.
         /// </summary>
         /// <param name="tableName">Name of the table, from which will be retrieving the data.</param>
@@ -79,6 +113,23 @@ namespace EasyADO.NET
             {
                 return command.ExecuteReader();
             }
+        }
+
+        /// <summary>
+        /// Retrieves all the data from a given table name by predicate.
+        /// </summary>
+        /// <param name="tableName">Name of the table, from which will be retrieving the data.</param>
+        /// <param name="predicate">Part of SQL query, which starts with 'WHERE' statement, e.g. 'WHERE ColumnName = Value AND AnotherColumnName = AnotherValue'.</param>
+        /// <typeparam name="T">Type of the class, to which will be converted result of query.</typeparam>
+        /// <returns>Collection of instances of <typeparamref name="T"/>.</returns>
+        /// <exception cref="ArgumentException">Throws, when <paramref name="tableName"/> doesn't exist in the database or <paramref name="predicate"/> is empty.</exception>
+        /// <exception cref="ArgumentNullException">Throws, when <paramref name="tableName"/> or <paramref name="predicate"/> is null. </exception>
+        /// <exception cref="SqlException">Throws, when <paramref name="predicate"/> has incorrect SQL syntax.</exception>
+        public IEnumerable<T> FindAll<T>(string tableName, string predicate) where T : class, new()
+        {
+            var reader = FindAll(tableName, predicate);
+
+            return reader.ConvertToClass<T>();
         }
 
         private static void CheckPredicate(string predicate)
