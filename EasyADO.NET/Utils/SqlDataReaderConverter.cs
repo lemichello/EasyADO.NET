@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -39,11 +40,16 @@ namespace EasyADO.NET.Utils
         {
             foreach (var prop in properties)
             {
-                if (prop.Name == reader.GetName(i))
-                {
-                    prop.SetValue(instance, reader[i]);
-                    return;
-                }
+                if (prop.Name != reader.GetName(i))
+                    continue;
+
+                var value = reader[i];
+
+                if (value == DBNull.Value)
+                    value = null;
+
+                prop.SetValue(instance, value);
+                return;
             }
         }
     }
