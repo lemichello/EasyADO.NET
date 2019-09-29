@@ -90,6 +90,10 @@ var result = easyAdoNet.ExecProcedure("Procedure name", new Dictionary<string, o
 var result = easyAdoNet.ExecProcedure("Procedure name");
 ```
 
+## Generic methods:
+There are generic versions for the methods, which return SqlDataReader. You can pass a type of your class to the 'Type parameter' section and the result of this method will be converted to the collection of that class instances.
+Note: The properties' names of the class and columns names in the table must be equal. Otherwise, the value from the query result will not be set to a particular class property.
+
 ### Notes
 If you have some questions, bug reports or feature requests, feel free to write it in the 'Issues' section.
 Thank you.
